@@ -22,6 +22,14 @@ public class Global {
     public static final String IMG_BG_STARS = FOLDER + "back2.png";
     public static final String IMG_SHIP = FOLDER + "ship.png";
     public static final String IMG_ENEMIE_1 = FOLDER + "en.png";
+    public static final String IMG_MISSLE = FOLDER + "missle_14x4.png";
+    
+    
+    public static final int BULLET_START_NUMBER = 3;
+    public static final double BULLET_SPEED = 8;
+    public static final int BULLET_MAX_MISSLES = 5;
+    public static final int BULLET_FIRE_FELAY = 10;
+    public static final int BULLET_MAX_NUMBER = 10;
 
 
     public static final String EVADER_FONT = "/res/font_white_12x8.png";

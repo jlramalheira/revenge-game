@@ -6,6 +6,7 @@ package screen;
 
 import framework.*;
 import game.Enemie1;
+import game.MissleLauncher;
 import game.Ship;
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
@@ -16,7 +17,7 @@ import main.Global;
  * @author João
  */
 public class ScreenGame extends Screen {
-    
+
     public static final int STATE_TITLE = 0;
     public static final int STATE_PLAY = 1;
     public static final int STATE_GAMEOVER = 2;
@@ -26,12 +27,14 @@ public class ScreenGame extends Screen {
     private Ship ship;
     private ObjectsCollection enimiesup;
     private ObjectsCollection enimiesdown;
+    private MissleLauncher missleLauncher;
+    private int quantidadeEnimie;
 
     public ScreenGame() {
         loadResources();
         initGame();
     }
-    
+
     public final void loadResources() {
         //Game objects
         bgLined = new Background(Util.loadImage(Global.IMG_BG_LINED), Background.SCROLL_NONE);
@@ -39,6 +42,7 @@ public class ScreenGame extends Screen {
         ship = new Ship(Util.loadImage(Global.IMG_SHIP), 50, 50);
         enimiesup = new ObjectsCollection(Global.ENIMIES_MAX_NUMBER);
         enimiesdown = new ObjectsCollection(Global.ENIMIES_MAX_NUMBER);
+        quantidadeEnimie = Global.ENIMIES_MAX_NUMBER * 2;
         Image imageEnimie1 = Util.loadImage(Global.IMG_ENEMIE_1);
         for (int i = 0; i < enimiesup.getTotalSize(); i++) {
             Enemie1 en = new Enemie1(imageEnimie1, 52, 30);
@@ -47,7 +51,7 @@ public class ScreenGame extends Screen {
             en.setSpeedX(4);
             enimiesup.addObject(en);
         }
-        
+
         for (int i = 0; i < enimiesdown.getTotalSize(); i++) {
             Enemie1 en = new Enemie1(imageEnimie1, 52, 30);
             en.setX((52 * i) + (15 * i));
@@ -55,6 +59,10 @@ public class ScreenGame extends Screen {
             en.setSpeedX(-3);
             enimiesdown.addObject(en);
         }
+
+        Image imageMissle = Util.loadImage(Global.IMG_MISSLE);
+        missleLauncher = new MissleLauncher(imageMissle,
+                14, 4, Global.BULLET_FIRE_FELAY, Global.BULLET_MAX_NUMBER);
 
     }
 
@@ -67,7 +75,7 @@ public class ScreenGame extends Screen {
         ship.setAnimation(Ship.ANIM_MOVE);
         ship.setTransformation(Ship.TRANS_NONE);
 
-        //enimiesup.makeAllObjectsAvailable();
+        missleLauncher.makeAllObjectsAvailable();
 
     }
 
@@ -104,28 +112,49 @@ public class ScreenGame extends Screen {
         if (enimiesup.collidesWithActiveObjects(ship, true)) {
             gameSate = STATE_GAMEOVER;
         }
-
-
-
+        //nave com tiro
+        for (int i = 0; i < enimiesup.getTotalSize(); i++) {
+            Enemie1 en = (Enemie1) enimiesup.getObject(i);
+            if (en.isActive()){
+                if (missleLauncher.collidesWithActiveObjects(en, false)){
+                    en.setActive(false);
+                    en.setVisible(false);
+                    enimiesup.makeObjectAvailable(en);
+                    quantidadeEnimie--;
+                }
+            }
+        }
+         for (int i = 0; i < enimiesdown.getTotalSize(); i++) {
+            Enemie1 en = (Enemie1) enimiesdown.getObject(i);
+            if (en.isActive()){
+                if (missleLauncher.collidesWithActiveObjects(en, false)){
+                    en.setActive(false);
+                    en.setVisible(false);
+                    enimiesdown.makeObjectAvailable(en);
+                    quantidadeEnimie--;
+                }
+            }
+        }
     }
 
     private void updateGameObjects() {
+        if (Key.FIRE) {
+            missleLauncher.fire(ship.getCenterX(), ship.getCenterY(),
+                    90, Global.BULLET_SPEED);
+        }
         bgLined.update();
         bgStars.update();
         ship.update();
+        missleLauncher.update();
 
-        //enimiesup.updateActiveObjects();
-        for (int i = 0; i < enimiesup.getTotalSize(); i++) {
-            Enemie1 en = (Enemie1) enimiesup.getObject(i);
-            en.update();
-        }
-        for (int i = 0; i < enimiesdown.getTotalSize(); i++) {
-            Enemie1 en = (Enemie1) enimiesdown.getObject(i);
-            en.update();
-        }
+        enimiesup.updateActiveObjects();
+        enimiesdown.updateActiveObjects();
     }
 
     private void updateGameScoreAndLevel() {
+        if (quantidadeEnimie <= 0){
+            //passou de fase
+        }
     }
 
     public void paint(Graphics g) {
@@ -147,9 +176,11 @@ public class ScreenGame extends Screen {
         bgLined.paint(g);
         bgStars.paint(g);
         ship.paint(g);
+        missleLauncher.paint(g);
 
         enimiesup.paintVisibleObjects(g);
         enimiesdown.paintVisibleObjects(g);
+        
 
     }
 
