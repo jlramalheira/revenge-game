@@ -21,7 +21,10 @@ public class Global {
     public static final String IMG_BG_LINED = FOLDER + "back1.jpg";
     public static final String IMG_BG_STARS = FOLDER + "back2.png";
     public static final String IMG_SHIP = FOLDER + "ship.png";
-    public static final String IMG_ENEMIE_1 = FOLDER + "en.png";
+    public static final String IMG_ENEMIE_1 = FOLDER + "en1.png";
+    public static final String IMG_ENEMIE_2 = FOLDER + "en2.png";
+    public static final String IMG_ENEMIE_3 = FOLDER + "en3.png";
+    public static final String IMG_ENEMIE_4 = FOLDER + "en4.png";
     public static final String IMG_MISSLE = FOLDER + "missle_14x4.png";
     
     
