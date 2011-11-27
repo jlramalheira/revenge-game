@@ -26,13 +26,14 @@ public class Global {
     public static final String IMG_ENEMIE_3 = FOLDER + "en3.png";
     public static final String IMG_ENEMIE_4 = FOLDER + "en4.png";
     public static final String IMG_MISSLE = FOLDER + "missle_14x4.png";
+    public static final String EVADER_IMG_EXPLOSION = FOLDER + "explosion_30x30.png";
     
     
     public static final int BULLET_START_NUMBER = 3;
-    public static final double BULLET_SPEED = 8;
-    public static final int BULLET_MAX_MISSLES = 5;
-    public static final int BULLET_FIRE_FELAY = 5;
-    public static final int BULLET_MAX_NUMBER = 10;
+    public static final double BULLET_SPEED = 10;
+    public static final int BULLET_MAX_MISSLES = 2;
+    public static final int BULLET_FIRE_FELAY = 15;
+    public static final int BULLET_MAX_NUMBER = 2;
 
 
     public static final String EVADER_FONT = "/res/font_white_12x8.png";
@@ -51,5 +52,5 @@ public class Global {
     
     // configuracao da aparencia do jogo   
     public static final int SHIP_ANIMATION_DELAY = 1;
-    public static final int EXPLOSTION_ANIMATION_DELAY = 2;
+    public static final int EXPLOSTION_ANIMATION_DELAY = 1;
 }

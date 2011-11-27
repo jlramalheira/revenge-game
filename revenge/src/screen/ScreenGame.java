@@ -7,6 +7,7 @@ package screen;
 import framework.*;
 import game.Enemie1;
 import game.MissileLauncher;
+import game.ParticleSystemExplosion;
 import game.Ship;
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
@@ -29,6 +30,7 @@ public class ScreenGame extends Screen {
     private ObjectsCollection enimiesdown;
     private MissileLauncher missleLauncher;
     private int quantidadeEnimie;
+    private ParticleSystemExplosion particleSystemExplosion;
 
     public ScreenGame() {
         loadResources();
@@ -43,6 +45,9 @@ public class ScreenGame extends Screen {
         enimiesup = new ObjectsCollection(Global.ENIMIES_MAX_NUMBER);
         enimiesdown = new ObjectsCollection(Global.ENIMIES_MAX_NUMBER);
         quantidadeEnimie = Global.ENIMIES_MAX_NUMBER * 2;
+        particleSystemExplosion = new ParticleSystemExplosion(
+                Util.loadImage(Global.EVADER_IMG_EXPLOSION), 30, 30, 10);
+        
         Image imageEnimie1 = Util.loadImage(Global.IMG_ENEMIE_1);
         for (int i = 0; i < enimiesup.getTotalSize(); i++) {
             Enemie1 en = new Enemie1(imageEnimie1, 52, 30);
@@ -62,7 +67,7 @@ public class ScreenGame extends Screen {
 
         Image imageMissle = Util.loadImage(Global.IMG_MISSLE);
         missleLauncher = new MissileLauncher(imageMissle,
-                14, 4, Global.BULLET_FIRE_FELAY, Global.BULLET_MAX_NUMBER);
+                14, 4, Global.BULLET_FIRE_FELAY, Global.BULLET_MAX_MISSLES);
 
     }
 
@@ -117,10 +122,12 @@ public class ScreenGame extends Screen {
             Enemie1 en = (Enemie1) enimiesup.getObject(i);
             if (en.isActive()){
                 if (missleLauncher.collidesWithActiveObjects(en, false)){
+                    particleSystemExplosion.addParticles(en.getCenterX(), en.getCenterY());
                     en.setActive(false);
                     en.setVisible(false);
                     enimiesup.makeObjectAvailable(en);
                     quantidadeEnimie--;
+                    
                 }
             }
         }
@@ -128,6 +135,7 @@ public class ScreenGame extends Screen {
             Enemie1 en = (Enemie1) enimiesdown.getObject(i);
             if (en.isActive()){
                 if (missleLauncher.collidesWithActiveObjects(en, false)){
+                    particleSystemExplosion.addParticles(en.getCenterX(), en.getCenterY());
                     en.setActive(false);
                     en.setVisible(false);
                     enimiesdown.makeObjectAvailable(en);
@@ -144,6 +152,7 @@ public class ScreenGame extends Screen {
         }
         bgLined.update();
         bgStars.update();
+        particleSystemExplosion.update();
         ship.update();
         missleLauncher.update();
 
@@ -180,6 +189,7 @@ public class ScreenGame extends Screen {
 
         enimiesup.paintVisibleObjects(g);
         enimiesdown.paintVisibleObjects(g);
+        particleSystemExplosion.paint(g);
         
 
     }
