@@ -6,7 +6,7 @@ package screen;
 
 import framework.*;
 import game.Enemie1;
-import game.MissleLauncher;
+import game.MissileLauncher;
 import game.Ship;
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
@@ -27,7 +27,7 @@ public class ScreenGame extends Screen {
     private Ship ship;
     private ObjectsCollection enimiesup;
     private ObjectsCollection enimiesdown;
-    private MissleLauncher missleLauncher;
+    private MissileLauncher missleLauncher;
     private int quantidadeEnimie;
 
     public ScreenGame() {
@@ -61,7 +61,7 @@ public class ScreenGame extends Screen {
         }
 
         Image imageMissle = Util.loadImage(Global.IMG_MISSLE);
-        missleLauncher = new MissleLauncher(imageMissle,
+        missleLauncher = new MissileLauncher(imageMissle,
                 14, 4, Global.BULLET_FIRE_FELAY, Global.BULLET_MAX_NUMBER);
 
     }

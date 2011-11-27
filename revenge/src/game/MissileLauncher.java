@@ -12,14 +12,14 @@ import javax.microedition.lcdui.Image;
  *
  * @author João
  */
-public class MissleLauncher extends BulletLauncher{
+public class MissileLauncher extends BulletLauncher{
 
-    public MissleLauncher(Image image, int frameWidth, int frameHeight, int fireDelay, int numberOfBullets) {
+    public MissileLauncher(Image image, int frameWidth, int frameHeight, int fireDelay, int numberOfBullets) {
         super(image, frameWidth, frameHeight, fireDelay, numberOfBullets);
     }
     
     public Bullet createBullet(Image image, int frameWidth, int frameHeight, BulletLauncher bulletLauncher) {
-        return new Missle(image, frameWidth, frameHeight, bulletLauncher);
+        return new Missile(image, frameWidth, frameHeight, bulletLauncher);
     }
     
 }

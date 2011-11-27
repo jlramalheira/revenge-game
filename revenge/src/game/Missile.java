@@ -14,9 +14,9 @@ import javax.microedition.lcdui.Image;
  *
  * @author João
  */
-public class Missle extends Bullet{
+public class Missile extends Bullet{
 
-    public Missle(Image image, int frameWidth, int frameHeight, BulletLauncher bulletLauncher) {
+    public Missile(Image image, int frameWidth, int frameHeight, BulletLauncher bulletLauncher) {
         super(image, frameWidth, frameHeight, bulletLauncher);
         setActive(false);
     }
