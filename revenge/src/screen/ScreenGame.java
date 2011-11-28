@@ -35,7 +35,7 @@ public class ScreenGame extends Screen {
     private int level;
 
     public ScreenGame() {
-        level = 2;
+        level = 1;
         loadResources();
         initGame();
 

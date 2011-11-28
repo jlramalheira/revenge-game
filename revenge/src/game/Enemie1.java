@@ -15,7 +15,7 @@ import javax.microedition.lcdui.Image;
  */
 public class Enemie1 extends GameObjectSprite {
 
-    public static final int[] ANIM_MOVE = {0};
+    public static final int[] ANIM_MOVE = {0,1,2};
 
     public Enemie1(Image image, int frameWidth, int frameHeight) {
         super(image, frameWidth, frameHeight);
@@ -35,6 +35,8 @@ public class Enemie1 extends GameObjectSprite {
         }
 
         setX(getX() + getSpeedX());
+        setAnimationDelay(10);
+        animate();
     }
 
     public void paint(Graphics g) {
