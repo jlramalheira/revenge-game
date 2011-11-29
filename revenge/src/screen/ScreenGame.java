@@ -7,6 +7,8 @@ package screen;
 import framework.*;
 import game.Enemie1;
 import game.Enemie2;
+import game.Enemie3;
+import game.Enemie4;
 import game.MissileLauncher;
 import game.ParticleSystemExplosion;
 import game.Ship;
@@ -35,7 +37,7 @@ public class ScreenGame extends Screen {
     private int level;
 
     public ScreenGame() {
-        level = 1;
+        level = 3;
         loadResources();
         initGame();
 
@@ -97,6 +99,54 @@ public class ScreenGame extends Screen {
                 enimiesdown.addObject(en);
             }
         }
+        
+        if (level == 3) {
+            bgLined = new Background(Util.loadImage(Global.IMG_BG_LINED), Background.SCROLL_NONE);
+            bgStars = new Background(Util.loadImage(Global.IMG_BG_STARS), Background.SCROLL_DOWN);
+            particleSystemExplosion = new ParticleSystemExplosion(
+                    Util.loadImage(Global.EVADER_IMG_EXPLOSION), 30, 30, 10);
+            Image imageEnimie3 = Util.loadImage(Global.IMG_ENEMIE_3);
+            for (int i = 0; i < enimiesup.getTotalSize(); i++) {
+                Enemie3 en = new Enemie3(imageEnimie3, 52, 30);
+                en.setX((52 * i) + (15 * i));
+                en.setY(10);
+                en.setSpeedY(2);
+                en.setSpeedX(8);
+                enimiesup.addObject(en);
+            }
+
+            for (int i = 0; i < enimiesdown.getTotalSize(); i++) {
+                Enemie3 en = new Enemie3(imageEnimie3, 52, 30);
+                en.setX((52 * i) + (15 * i));
+                en.setY(55);
+                en.setSpeedY(2);
+                en.setSpeedX(-7);
+                enimiesdown.addObject(en);
+            }
+        }
+        
+        if (level == 4) {
+            bgLined = new Background(Util.loadImage(Global.IMG_BG_LINED), Background.SCROLL_NONE);
+            bgStars = new Background(Util.loadImage(Global.IMG_BG_STARS), Background.SCROLL_DOWN);
+            particleSystemExplosion = new ParticleSystemExplosion(
+                    Util.loadImage(Global.EVADER_IMG_EXPLOSION), 30, 30, 10);
+            Image imageEnimie4 = Util.loadImage(Global.IMG_ENEMIE_4);
+            for (int i = 0; i < enimiesup.getTotalSize(); i++) {
+                Enemie4 en = new Enemie4(imageEnimie4, 52, 30);
+                en.setX((52 * i) + (15 * i));
+                en.setY(10);
+                en.setVelocidade(8);
+                enimiesup.addObject(en);
+            }
+
+            for (int i = 0; i < enimiesdown.getTotalSize(); i++) {
+                Enemie4 en = new Enemie4(imageEnimie4, 52, 30);
+                en.setX((52 * i) + (15 * i));
+                en.setY(55);
+                en.setVelocidade(-7);
+                enimiesdown.addObject(en);
+            }
+        }
 
 
     }
@@ -121,14 +171,9 @@ public class ScreenGame extends Screen {
                 break;
 
             case STATE_PLAY:
-                System.out.println("1");
                 updateGameScoreAndLevel();
-                System.out.println("2");
                 updateGameObjects();
-                System.out.println("3");
-
                 updateCollisions();
-                System.out.println("4");
                 break;
 
             case STATE_GAMEOVER:
