@@ -33,7 +33,7 @@ public class Enemie2 extends GameObjectSprite {
         super(image, frameWidth, frameHeight);
         setActive(true);
         contStop = 0;
-        contGo = 0;
+        contGo = 10;
         flying = true;
     }
 

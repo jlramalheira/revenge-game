@@ -16,9 +16,9 @@ import javax.microedition.lcdui.Image;
 public class Enemie4 extends GameObjectSprite {
 
     public static final int[] ANIM_MOVE = {0};
-    private int contStop;
+    private int contBack;
     private int contGo;
-    private boolean flying;
+    private boolean correto;
     private int velocidade;
 
     public int getVelocidade() {
@@ -28,32 +28,39 @@ public class Enemie4 extends GameObjectSprite {
     public void setVelocidade(int velocidade) {
         this.velocidade = velocidade;
     }
-    
+
     public Enemie4(Image image, int frameWidth, int frameHeight) {
         super(image, frameWidth, frameHeight);
         setActive(true);
-        contStop = 0;
+        contBack = 0;
         contGo = 0;
-        flying = true;
+        correto = true;
     }
 
     public void update() {
-        if (flying){
-            contStop++;
-        } else {
-            contGo++;
-        }
-        if (contStop >= 60) {
-            contStop = 0;
-            setSpeedX(0);
-            flying = false;
-        }
-        if (contGo >= 10){
+        if (correto) {
             setSpeedX(velocidade);
-            contGo=0;
-            flying = true;
+            contGo++;
+        } else {
+            setSpeedX(-velocidade);
+            contBack++;
         }
-        
+
+
+        if (contGo <= 60) {
+            correto = true;
+            contBack = 0;
+        } else {
+            if (contBack <= 30) {
+                correto = false;
+            } else {
+                correto = true;
+                contGo = 0;
+            }
+        }
+
+
+
         setX(getX() + getSpeedX());
         if (getSpeedX() > 0) {
             if (getX() > 620) { //625 é o numero para 10 inimigos
@@ -72,5 +79,4 @@ public class Enemie4 extends GameObjectSprite {
 
     public void collided(GameObjectSprite collidedObject) {
     }
-    
 }

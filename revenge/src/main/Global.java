@@ -26,6 +26,7 @@ public class Global {
     public static final String IMG_ENEMIE_3 = FOLDER + "en3.png";
     public static final String IMG_ENEMIE_4 = FOLDER + "en4.png";
     public static final String IMG_MISSLE = FOLDER + "missle_14x4.png";
+    public static final String IMG_MISSLE_ENEMIE = FOLDER + "missle_14x4.png";
     public static final String EVADER_IMG_EXPLOSION = FOLDER + "explosion_30x30.png";
     
     
