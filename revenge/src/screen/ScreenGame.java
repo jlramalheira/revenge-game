@@ -230,7 +230,8 @@ public class ScreenGame extends Screen {
             shield.setVisible(false);
             shield.setActive(false);
         }
-
+        
+        
         //se tem escudo nao pode receber colisao
         if (!haveShield) {
             //imimigos com nave
