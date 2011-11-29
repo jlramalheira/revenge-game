@@ -48,6 +48,13 @@ public class Global {
 
     // configuracoes dos objetos do jogo
     public static final int SHIP_SPEED = 5;
+    public static final int TIME_BONUS = 60;
+    public static final String IMG_BONUS_SHIELD = FOLDER + "shield.png";
+    
+    //configuracao dos bonus
+    public static final int POSSIBILITES_BONUS = 5;
+    public static final int BONUS_SPEED = 5;
+   
     
     // configuracoes dos levels do jogo
     

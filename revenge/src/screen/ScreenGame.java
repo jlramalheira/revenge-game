@@ -11,6 +11,7 @@ import game.Enemie3;
 import game.Enemie4;
 import game.MissileLauncher;
 import game.ParticleSystemExplosion;
+import game.Shield;
 import game.Ship;
 import java.util.Random;
 import javax.microedition.lcdui.Graphics;
@@ -32,13 +33,17 @@ public class ScreenGame extends Screen {
     private Ship ship;
     private ObjectsCollection enimiesup;
     private ObjectsCollection enimiesdown;
-    private MissileLauncher missleLauncher;
+    private MissileLauncher missileLauncher;
     private int quantidadeEnimie;
     private ParticleSystemExplosion particleSystemExplosion;
     private int level;
-    private MissileLauncher missleEnimieLauncher;
+    private MissileLauncher missileEnimieLauncher;
     private int contFireEnemie;
-    Random r = new Random();
+    private Random r = new Random();
+    private boolean haveShield;
+    private boolean haveDoubleMissile;
+    private int timeBonus;
+    private Shield shield;
 
     public ScreenGame() {
         level = 3;
@@ -55,15 +60,23 @@ public class ScreenGame extends Screen {
         quantidadeEnimie = Global.ENIMIES_MAX_NUMBER * 2;
         contFireEnemie = 0;
 
-        Image imageMissleEnemie = Util.loadImage(Global.IMG_MISSLE_ENEMIE);
-        missleEnimieLauncher = new MissileLauncher(imageMissleEnemie,
-                14, 4, Global.BULLET_FIRE_FELAY, Global.BULLET_MAX_NUMBER);
+        shield = new Shield(Util.loadImage(Global.IMG_BONUS_SHIELD), 16, 16);
+        shield.setSpeedY(Global.BONUS_SPEED);
 
+        haveShield = false;
+        haveDoubleMissile = false;
+        timeBonus = 0;
+
+
+        Image imageMissleEnemie = Util.loadImage(Global.IMG_MISSLE_ENEMIE);
+        missileEnimieLauncher = new MissileLauncher(imageMissleEnemie,
+                14, 4, Global.BULLET_FIRE_FELAY, Global.BULLET_MAX_NUMBER);
         Image imageMissle = Util.loadImage(Global.IMG_MISSILE);
-        missleLauncher = new MissileLauncher(imageMissle,
+        missileLauncher = new MissileLauncher(imageMissle,
                 14, 4, Global.BULLET_FIRE_FELAY, Global.BULLET_MAX_MISSLES);
 
-        if (level == 1) {
+        if (level
+                == 1) {
             bgLined = new Background(Util.loadImage(Global.IMG_BG_LINED), Background.SCROLL_NONE);
             bgStars = new Background(Util.loadImage(Global.IMG_BG_STARS), Background.SCROLL_DOWN);
             particleSystemExplosion = new ParticleSystemExplosion(
@@ -86,7 +99,8 @@ public class ScreenGame extends Screen {
             }
         }
 
-        if (level == 2) {
+        if (level
+                == 2) {
             bgLined = new Background(Util.loadImage(Global.IMG_BG_LINED), Background.SCROLL_NONE);
             bgStars = new Background(Util.loadImage(Global.IMG_BG_STARS), Background.SCROLL_DOWN);
             particleSystemExplosion = new ParticleSystemExplosion(
@@ -109,7 +123,8 @@ public class ScreenGame extends Screen {
             }
         }
 
-        if (level == 3) {
+        if (level
+                == 3) {
             bgLined = new Background(Util.loadImage(Global.IMG_BG_LINED), Background.SCROLL_NONE);
             bgStars = new Background(Util.loadImage(Global.IMG_BG_STARS), Background.SCROLL_DOWN);
             particleSystemExplosion = new ParticleSystemExplosion(
@@ -134,7 +149,8 @@ public class ScreenGame extends Screen {
             }
         }
 
-        if (level == 4) {
+        if (level
+                == 4) {
             bgLined = new Background(Util.loadImage(Global.IMG_BG_LINED), Background.SCROLL_NONE);
             bgStars = new Background(Util.loadImage(Global.IMG_BG_STARS), Background.SCROLL_DOWN);
             particleSystemExplosion = new ParticleSystemExplosion(
@@ -156,8 +172,6 @@ public class ScreenGame extends Screen {
                 enimiesdown.addObject(en);
             }
         }
-
-
     }
 
     /**
@@ -169,8 +183,8 @@ public class ScreenGame extends Screen {
         ship.setAnimation(Ship.ANIM_MOVE);
         ship.setTransformation(Ship.TRANS_NONE);
 
-        missleLauncher.makeAllObjectsAvailable();
-        missleEnimieLauncher.makeAllObjectsAvailable();
+        missileLauncher.makeAllObjectsAvailable();
+        missileEnimieLauncher.makeAllObjectsAvailable();
 
     }
 
@@ -199,45 +213,92 @@ public class ScreenGame extends Screen {
         bgStars.update();
         if (Key.FIRE) {
             gameSate = STATE_PLAY;
-            level = 3;
+            level = 1;
             loadResources();
             initGame();
         }
     }
 
     private void updateCollisions() {
-        //imimigos com nave
-        if (enimiesup.collidesWithActiveObjects(ship, true)) {
-            gameSate = STATE_GAMEOVER;
-
+        //nave com shield
+        if (shield.collidesWith(ship, true)) {
+            haveShield = true;
+            shield.setVisible(false);
+            shield.setActive(false);
         }
 
-        //tiro inimigo nave
-        if (missleEnimieLauncher.collidesWithActiveObjects(ship, true)) {
-            gameSate = STATE_GAMEOVER;
+        //se tem escudo nao pode receber colisao
+        if (!haveShield) {
+            //imimigos com nave
+            if (enimiesup.collidesWithActiveObjects(ship, true)) {
+                gameSate = STATE_GAMEOVER;
+            }
+
+            //tiro inimigo nave
+            if (missileEnimieLauncher.collidesWithActiveObjects(ship, true)) {
+                gameSate = STATE_GAMEOVER;
+            }
         }
+
+        if (haveShield) {
+            if (timeBonus++ >= Global.TIME_BONUS) {
+                haveShield = false;
+                timeBonus = 0;
+            }
+        }
+
         //nave com tiro
         for (int i = 0; i < enimiesup.getTotalSize(); i++) {
             if (enimiesup.getObject(i).isActive()) {
-                if (missleLauncher.collidesWithActiveObjects(enimiesup.getObject(i), false)) {
+                if (missileLauncher.collidesWithActiveObjects(enimiesup.getObject(i), false)) {
                     particleSystemExplosion.addParticles(enimiesup.getObject(i).getCenterX(), enimiesup.getObject(i).getCenterY());
                     enimiesup.getObject(i).setActive(false);
                     enimiesup.getObject(i).setVisible(false);
                     enimiesup.makeObjectAvailable(enimiesup.getObject(i));
                     quantidadeEnimie--;
 
+                    //caindo bonus
+                    if (!haveDoubleMissile && !haveShield) {
+                        int teste = r.nextInt(Global.POSSIBILITES_BONUS);
+                        System.out.println(teste);
+                        if (teste == 1) {
+                            if (r.nextInt(2) == 0) {
+                                haveDoubleMissile = true;
+                            } else {
+                                shield.setActive(true);
+                                shield.setVisible(true);
+                                shield.setX(enimiesdown.getObject(i).getCenterX());
+                                shield.setY(enimiesdown.getObject(i).getCenterY());
+                            }
+                        }
+                    }
                 }
             }
         }
         for (int i = 0; i < enimiesdown.getTotalSize(); i++) {
             if (enimiesdown.getObject(i).isActive()) {
-                if (missleLauncher.collidesWithActiveObjects(enimiesdown.getObject(i), false)) {
+                if (missileLauncher.collidesWithActiveObjects(enimiesdown.getObject(i), false)) {
                     particleSystemExplosion.addParticles(enimiesdown.getObject(i).getCenterX(), enimiesdown.getObject(i).getCenterY());
                     enimiesdown.getObject(i).setActive(false);
                     enimiesdown.getObject(i).setVisible(false);
                     enimiesdown.makeObjectAvailable(enimiesdown.getObject(i));
                     quantidadeEnimie--;
 
+                    //caindo bonus
+                    if (!haveDoubleMissile && !haveShield) {
+                        int teste = r.nextInt(Global.POSSIBILITES_BONUS);
+                        System.out.println(teste);
+                        if (teste == 1) {
+                            if (r.nextInt(2) == 0) {
+                                haveDoubleMissile = true;
+                            } else {
+                                shield.setActive(true);
+                                shield.setVisible(true);
+                                shield.setX(enimiesdown.getObject(i).getCenterX());
+                                shield.setY(enimiesdown.getObject(i).getCenterY());
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -245,41 +306,42 @@ public class ScreenGame extends Screen {
 
     private void updateGameObjects() {
         if (Key.FIRE) {
-            missleLauncher.fire(ship.getCenterX(), ship.getCenterY(),
+            missileLauncher.fire(ship.getCenterX(), ship.getCenterY(),
                     90, Global.BULLET_SPEED);
-        }    
-        
+        }
+
         //MÉTODO PARA O INIMIGO ATIRAR
         //Procura um inimigo que esteja ativo e dentro da tela, se não achar, encontra outro
-        boolean atirado = false;        
-        do{
+        boolean atirado = false;
+        do {
             int inimigo = r.nextInt(enimiesup.getAvailableSize());
-            if (enimiesup.getObject(inimigo).isActive()) {                
+            if (enimiesup.getObject(inimigo).isActive()) {
                 if (enimiesup.getObject(inimigo).getCenterX() < Screen.getWidth()) {
-                    missleEnimieLauncher.fire(enimiesup.getObject(inimigo).getCenterX(), enimiesup.getObject(inimigo).getCenterY(),
-                        270, Global.BULLET_SPEED);
+                    missileEnimieLauncher.fire(enimiesup.getObject(inimigo).getCenterX(), enimiesup.getObject(inimigo).getCenterY(),
+                            270, Global.BULLET_SPEED);
                     contFireEnemie = 0;
                     atirado = true;
                 }
             }
             if (enimiesdown.getObject(inimigo).isActive()) {
                 if (enimiesdown.getObject(inimigo).getCenterX() < (Screen.getWidth())) {
-                    missleEnimieLauncher.fire(enimiesdown.getObject(inimigo).getCenterX(), enimiesdown.getObject(inimigo).getCenterY(),
+                    missileEnimieLauncher.fire(enimiesdown.getObject(inimigo).getCenterX(), enimiesdown.getObject(inimigo).getCenterY(),
                             270, Global.BULLET_SPEED);
                     contFireEnemie = 0;
                     atirado = true;
                 }
-            }            
-        }while((atirado = false) && (contFireEnemie++ >= 60));
-        
+            }
+        } while ((atirado = false) && (contFireEnemie++ >= 60));
+
         atirado = false;
-        
+
         bgLined.update();
         bgStars.update();
         particleSystemExplosion.update();
         ship.update();
-        missleLauncher.update();
-        missleEnimieLauncher.update();
+        missileLauncher.update();
+        missileEnimieLauncher.update();
+        shield.update();
 
         enimiesup.updateActiveObjects();
         enimiesdown.updateActiveObjects();
@@ -314,8 +376,9 @@ public class ScreenGame extends Screen {
         bgLined.paint(g);
         bgStars.paint(g);
         ship.paint(g);
-        missleLauncher.paint(g);
-        missleEnimieLauncher.paint(g);
+        missileLauncher.paint(g);
+        missileEnimieLauncher.paint(g);
+        shield.paint(g);
 
         enimiesup.paintVisibleObjects(g);
         enimiesdown.paintVisibleObjects(g);
