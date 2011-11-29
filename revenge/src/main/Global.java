@@ -25,9 +25,12 @@ public class Global {
     public static final String IMG_ENEMIE_2 = FOLDER + "en2.png";
     public static final String IMG_ENEMIE_3 = FOLDER + "en3.png";
     public static final String IMG_ENEMIE_4 = FOLDER + "en4.png";
-    public static final String IMG_MISSLE = FOLDER + "missle_14x4.png";
+    public static final String IMG_MISSILE = FOLDER + "missle_14x4.png";
     public static final String IMG_MISSLE_ENEMIE = FOLDER + "missle_14x4.png";
-    public static final String EVADER_IMG_EXPLOSION = FOLDER + "explosion_30x30.png";
+    public static final String EVADER_IMG_EXPLOSION_1 = FOLDER + "explosion1.png";
+    public static final String EVADER_IMG_EXPLOSION_2 = FOLDER + "explosion2.png";
+    public static final String EVADER_IMG_EXPLOSION_3 = FOLDER + "explosion3.png";
+    public static final String EVADER_IMG_EXPLOSION_4 = FOLDER + "explosion4.png";
     
     
     public static final int BULLET_START_NUMBER = 3;

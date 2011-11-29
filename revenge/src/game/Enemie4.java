@@ -71,6 +71,7 @@ public class Enemie4 extends GameObjectSprite {
                 setX(Screen.getWidth());
             }
         }
+        animate();
     }
 
     public void paint(Graphics g) {

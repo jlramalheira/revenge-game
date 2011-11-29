@@ -38,9 +38,10 @@ public class ScreenGame extends Screen {
     private int level;
     private MissileLauncher missleEnimieLauncher;
     private int contFireEnemie;
+    Random r = new Random();
 
     public ScreenGame() {
-        level = 4;
+        level = 3;
         loadResources();
         initGame();
 
@@ -58,7 +59,7 @@ public class ScreenGame extends Screen {
         missleEnimieLauncher = new MissileLauncher(imageMissleEnemie,
                 14, 4, Global.BULLET_FIRE_FELAY, Global.BULLET_MAX_NUMBER);
 
-        Image imageMissle = Util.loadImage(Global.IMG_MISSLE);
+        Image imageMissle = Util.loadImage(Global.IMG_MISSILE);
         missleLauncher = new MissileLauncher(imageMissle,
                 14, 4, Global.BULLET_FIRE_FELAY, Global.BULLET_MAX_MISSLES);
 
@@ -66,7 +67,7 @@ public class ScreenGame extends Screen {
             bgLined = new Background(Util.loadImage(Global.IMG_BG_LINED), Background.SCROLL_NONE);
             bgStars = new Background(Util.loadImage(Global.IMG_BG_STARS), Background.SCROLL_DOWN);
             particleSystemExplosion = new ParticleSystemExplosion(
-                    Util.loadImage(Global.EVADER_IMG_EXPLOSION), 30, 30, 10);
+                    Util.loadImage(Global.EVADER_IMG_EXPLOSION_1), 30, 30, 10);
             Image imageEnimie1 = Util.loadImage(Global.IMG_ENEMIE_1);
             for (int i = 0; i < enimiesup.getTotalSize(); i++) {
                 Enemie1 en = new Enemie1(imageEnimie1, 52, 30);
@@ -89,7 +90,7 @@ public class ScreenGame extends Screen {
             bgLined = new Background(Util.loadImage(Global.IMG_BG_LINED), Background.SCROLL_NONE);
             bgStars = new Background(Util.loadImage(Global.IMG_BG_STARS), Background.SCROLL_DOWN);
             particleSystemExplosion = new ParticleSystemExplosion(
-                    Util.loadImage(Global.EVADER_IMG_EXPLOSION), 30, 30, 10);
+                    Util.loadImage(Global.EVADER_IMG_EXPLOSION_2), 30, 30, 10);
             Image imageEnimie2 = Util.loadImage(Global.IMG_ENEMIE_2);
             for (int i = 0; i < enimiesup.getTotalSize(); i++) {
                 Enemie2 en = new Enemie2(imageEnimie2, 52, 30);
@@ -112,7 +113,7 @@ public class ScreenGame extends Screen {
             bgLined = new Background(Util.loadImage(Global.IMG_BG_LINED), Background.SCROLL_NONE);
             bgStars = new Background(Util.loadImage(Global.IMG_BG_STARS), Background.SCROLL_DOWN);
             particleSystemExplosion = new ParticleSystemExplosion(
-                    Util.loadImage(Global.EVADER_IMG_EXPLOSION), 30, 30, 10);
+                    Util.loadImage(Global.EVADER_IMG_EXPLOSION_3), 30, 30, 10);
             Image imageEnimie3 = Util.loadImage(Global.IMG_ENEMIE_3);
             for (int i = 0; i < enimiesup.getTotalSize(); i++) {
                 Enemie3 en = new Enemie3(imageEnimie3, 52, 30);
@@ -137,7 +138,7 @@ public class ScreenGame extends Screen {
             bgLined = new Background(Util.loadImage(Global.IMG_BG_LINED), Background.SCROLL_NONE);
             bgStars = new Background(Util.loadImage(Global.IMG_BG_STARS), Background.SCROLL_DOWN);
             particleSystemExplosion = new ParticleSystemExplosion(
-                    Util.loadImage(Global.EVADER_IMG_EXPLOSION), 30, 30, 10);
+                    Util.loadImage(Global.EVADER_IMG_EXPLOSION_4), 30, 30, 10);
             Image imageEnimie4 = Util.loadImage(Global.IMG_ENEMIE_4);
             for (int i = 0; i < enimiesup.getTotalSize(); i++) {
                 Enemie4 en = new Enemie4(imageEnimie4, 52, 30);
@@ -198,7 +199,7 @@ public class ScreenGame extends Screen {
         bgStars.update();
         if (Key.FIRE) {
             gameSate = STATE_PLAY;
-            level = 4;
+            level = 3;
             loadResources();
             initGame();
         }
@@ -246,26 +247,33 @@ public class ScreenGame extends Screen {
         if (Key.FIRE) {
             missleLauncher.fire(ship.getCenterX(), ship.getCenterY(),
                     90, Global.BULLET_SPEED);
-        }
-
-        Random r = new Random();
-        int inimigo = r.nextInt(enimiesup.getAvailableSize());
-        if (contFireEnemie++ >= 60) {
-            if (enimiesup.getObject(inimigo).isActive()) {
-                missleEnimieLauncher.fire(enimiesup.getObject(inimigo).getCenterX(), enimiesup.getObject(inimigo).getCenterY(),
-                        270, Global.BULLET_SPEED);
+        }    
+        
+        //MÉTODO PARA O INIMIGO ATIRAR
+        //Procura um inimigo que esteja ativo e dentro da tela, se não achar, encontra outro
+        boolean atirado = false;        
+        do{
+            int inimigo = r.nextInt(enimiesup.getAvailableSize());
+            if (enimiesup.getObject(inimigo).isActive()) {                
                 if (enimiesup.getObject(inimigo).getCenterX() < Screen.getWidth()) {
+                    missleEnimieLauncher.fire(enimiesup.getObject(inimigo).getCenterX(), enimiesup.getObject(inimigo).getCenterY(),
+                        270, Global.BULLET_SPEED);
                     contFireEnemie = 0;
+                    atirado = true;
                 }
             }
             if (enimiesdown.getObject(inimigo).isActive()) {
-                missleEnimieLauncher.fire(enimiesdown.getObject(inimigo).getCenterX(), enimiesdown.getObject(inimigo).getCenterY(),
-                        270, Global.BULLET_SPEED);
-                if (enimiesdown.getObject(inimigo).getCenterX() < Screen.getWidth()) {
+                if (enimiesdown.getObject(inimigo).getCenterX() < (Screen.getWidth())) {
+                    missleEnimieLauncher.fire(enimiesdown.getObject(inimigo).getCenterX(), enimiesdown.getObject(inimigo).getCenterY(),
+                            270, Global.BULLET_SPEED);
                     contFireEnemie = 0;
+                    atirado = true;
                 }
-            }
-        }
+            }            
+        }while((atirado = false) && (contFireEnemie++ >= 60));
+        
+        atirado = false;
+        
         bgLined.update();
         bgStars.update();
         particleSystemExplosion.update();

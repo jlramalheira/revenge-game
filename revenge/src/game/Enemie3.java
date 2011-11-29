@@ -23,6 +23,7 @@ public class Enemie3 extends GameObjectSprite {
         super(image, frameWidth, frameHeight);
         setActive(true);
         contInv = 0;
+        this.setAnimationDelay(5);
     }
 
     public void update() {
@@ -41,6 +42,7 @@ public class Enemie3 extends GameObjectSprite {
                 setX(Screen.getWidth());
             }
         }
+        animate();
     }
 
     public void paint(Graphics g) {
