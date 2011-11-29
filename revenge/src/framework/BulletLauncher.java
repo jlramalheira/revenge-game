@@ -40,6 +40,18 @@ public abstract class BulletLauncher extends ObjectsCollection {
             }
         }
     }
+    
+    public void doublefire(double x, double y, double direction1, double direction2, double speed) {
+        if (fireDelayCount > fireDelay) {
+            Bullet b1 = (Bullet) getAvailableObject();
+            Bullet b2 = (Bullet) getAvailableObject();
+            if (b1 != null && b2!= null) {
+                b1.fire(x - b1.getWidth() / 2, y - b1.getHeight() / 2, direction1, speed);
+                b2.fire(x - b2.getWidth() / 2, y - b2.getHeight() / 2, direction2, speed);
+                fireDelayCount = 0;
+            }
+        }
+    }
 
     public void update() {
         fireDelayCount++;

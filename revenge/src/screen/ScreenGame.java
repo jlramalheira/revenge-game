@@ -5,6 +5,7 @@
 package screen;
 
 import framework.*;
+import game.DoubleMissile;
 import game.Enemie1;
 import game.Enemie2;
 import game.Enemie3;
@@ -44,6 +45,7 @@ public class ScreenGame extends Screen {
     private boolean haveDoubleMissile;
     private int timeBonus;
     private Shield shield;
+    private DoubleMissile doubleMissile;
 
     public ScreenGame() {
         level = 3;
@@ -62,6 +64,8 @@ public class ScreenGame extends Screen {
 
         shield = new Shield(Util.loadImage(Global.IMG_BONUS_SHIELD), 16, 16);
         shield.setSpeedY(Global.BONUS_SPEED);
+        doubleMissile = new DoubleMissile(Util.loadImage(Global.IMG_BONUS_DOUBLE_MISSILE), 24, 24);
+        doubleMissile.setSpeedY(Global.BONUS_SPEED);
 
         haveShield = false;
         haveDoubleMissile = false;
@@ -247,6 +251,20 @@ public class ScreenGame extends Screen {
             }
         }
 
+        //nave com double missile
+        if (doubleMissile.collidesWith(ship, true)) {
+            haveDoubleMissile = true;
+            doubleMissile.setActive(false);
+            doubleMissile.setVisible(false);
+        }
+
+        if (haveDoubleMissile) {
+            if (timeBonus++ >= Global.TIME_BONUS) {
+                haveDoubleMissile = false;
+                timeBonus = 0;
+            }
+        }
+
         //nave com tiro
         for (int i = 0; i < enimiesup.getTotalSize(); i++) {
             if (enimiesup.getObject(i).isActive()) {
@@ -262,8 +280,11 @@ public class ScreenGame extends Screen {
                         int teste = r.nextInt(Global.POSSIBILITES_BONUS);
                         System.out.println(teste);
                         if (teste == 1) {
-                            if (r.nextInt(2) == 0) {
-                                haveDoubleMissile = true;
+                            if (0 == 0) {
+                                doubleMissile.setActive(true);
+                                doubleMissile.setVisible(true);
+                                doubleMissile.setX(enimiesdown.getObject(i).getCenterX());
+                                doubleMissile.setY(enimiesdown.getObject(i).getCenterY());
                             } else {
                                 shield.setActive(true);
                                 shield.setVisible(true);
@@ -289,8 +310,11 @@ public class ScreenGame extends Screen {
                         int teste = r.nextInt(Global.POSSIBILITES_BONUS);
                         System.out.println(teste);
                         if (teste == 1) {
-                            if (r.nextInt(2) == 0) {
-                                haveDoubleMissile = true;
+                            if (0 == 0) {
+                                doubleMissile.setActive(true);
+                                doubleMissile.setVisible(true);
+                                doubleMissile.setX(enimiesdown.getObject(i).getCenterX());
+                                doubleMissile.setY(enimiesdown.getObject(i).getCenterY());
                             } else {
                                 shield.setActive(true);
                                 shield.setVisible(true);
@@ -306,8 +330,14 @@ public class ScreenGame extends Screen {
 
     private void updateGameObjects() {
         if (Key.FIRE) {
-            missileLauncher.fire(ship.getCenterX(), ship.getCenterY(),
-                    90, Global.BULLET_SPEED);
+            if (haveDoubleMissile) {
+                missileLauncher.doublefire(ship.getCenterX(), ship.getCenterY(),
+                        105,75, Global.BULLET_SPEED);                
+                
+            } else {
+                missileLauncher.fire(ship.getCenterX(), ship.getCenterY(),
+                        90, Global.BULLET_SPEED);
+            }
         }
 
         //MÉTODO PARA O INIMIGO ATIRAR
@@ -342,6 +372,7 @@ public class ScreenGame extends Screen {
         missileLauncher.update();
         missileEnimieLauncher.update();
         shield.update();
+        doubleMissile.update();
 
         enimiesup.updateActiveObjects();
         enimiesdown.updateActiveObjects();
@@ -379,6 +410,7 @@ public class ScreenGame extends Screen {
         missileLauncher.paint(g);
         missileEnimieLauncher.paint(g);
         shield.paint(g);
+        doubleMissile.paint(g);
 
         enimiesup.paintVisibleObjects(g);
         enimiesdown.paintVisibleObjects(g);

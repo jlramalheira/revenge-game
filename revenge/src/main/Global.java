@@ -35,9 +35,9 @@ public class Global {
     
     public static final int BULLET_START_NUMBER = 3;
     public static final double BULLET_SPEED = 10;
-    public static final int BULLET_MAX_MISSLES = 2;
+    public static final int BULLET_MAX_MISSLES = 3;
     public static final int BULLET_FIRE_FELAY = 15;
-    public static final int BULLET_MAX_NUMBER = 2;
+    public static final int BULLET_MAX_NUMBER = 3;
 
 
     public static final String EVADER_FONT = "/res/font_white_12x8.png";
@@ -47,13 +47,14 @@ public class Global {
     public static final int SCREEN_HEIGHT= 320;
 
     // configuracoes dos objetos do jogo
-    public static final int SHIP_SPEED = 5;
-    public static final int TIME_BONUS = 60;
-    public static final String IMG_BONUS_SHIELD = FOLDER + "shield.png";
+    public static final int SHIP_SPEED = 5;    
     
     //configuracao dos bonus
     public static final int POSSIBILITES_BONUS = 5;
     public static final int BONUS_SPEED = 5;
+    public static final int TIME_BONUS = 60;
+    public static final String IMG_BONUS_SHIELD = FOLDER + "shield.png";
+    public static final String IMG_BONUS_DOUBLE_MISSILE = FOLDER + "double_missile.png";
    
     
     // configuracoes dos levels do jogo
