@@ -59,7 +59,7 @@ public class Global {
     // configuracoes dos objetos do jogo
     public static final int SHIP_SPEED = 5;    
     public static final int BOSS_SPEEDX = 4;    
-    public static final int BOSS_SPEEDY = 3;
+    public static final int BOSS_SPEEDY = 9;
     
     //boss
     public static final int MISSLE_BOSS_DIE = 50;

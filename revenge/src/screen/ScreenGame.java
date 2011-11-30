@@ -190,7 +190,7 @@ public class ScreenGame extends Screen {
         if (level == 5) {
             //BOSS
             Sound.play(Global.MUSIC_BOSS, true);
-            boss = new Boss(Util.loadImage(Global.IMG_BOSS), 100, 100);
+            boss = new Boss(Util.loadImage(Global.IMG_BOSS), 75, 75);
             particleSystemExplosion = new ParticleSystemExplosion(
                     Util.loadImage(Global.EVADER_IMG_EXPLOSION_BOSS), 30, 30, 10);
             boss.setSpeedX(Global.BOSS_SPEEDX);
@@ -247,7 +247,7 @@ public class ScreenGame extends Screen {
             gameSate = STATE_PLAY;
             lives = 3;
             score = 0;
-            level = 4;
+            level = 5;
             loadResources();
             initGame();
 
@@ -454,7 +454,7 @@ public class ScreenGame extends Screen {
         } else { //tiro do boss
             if (boss.getY() < 5) {
                 if (contFireEnemie++ >= 30) {
-                    missileEnimieLauncher.doublefire(boss.getCenterX() + 26, boss.getCenterY() + 36, boss.getCenterX() - 26, boss.getCenterY() + 36,
+                    missileEnimieLauncher.doublefire(boss.getCenterX() + 18, boss.getCenterY() + 29, boss.getCenterX() - 18, boss.getCenterY() + 29,
                             270, 270, Global.BULLET_ENEMIE_SPEED);
                     contFireEnemie = 0;
                 }

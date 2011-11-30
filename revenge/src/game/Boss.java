@@ -39,26 +39,25 @@ public class Boss extends GameObjectSprite {
         }
 
         //verifica pra descer
-        if (!down){
+        if (!down) {
             contToDown++;
         }
-        
-        if (down){
-            if (getY() < 1){
+
+        if (down) {
+            if (getY() < 1) {
                 down = false;
                 contToDown = 0;
             }
         }
-        
-        if (getY() > 1){
+
+        if (getY() > 1) {
             down = true;
-        } 
-        
-        System.out.println(getY()+" "+ down);
-        
-        setX(getX() + getSpeedX());
+        }
+
         if (contToDown > 110) {
             setY(getY() + getSpeedY());
+        } else {
+            setX(getX() + getSpeedX());
         }
 
         animate();
