@@ -17,7 +17,7 @@ import main.Global;
  */
 public class Ship extends GameObjectSprite{
 
-    public static final int[] ANIM_MOVE = {0};
+    public static final int[] ANIM_MOVE = {0,1,2};
 
     public Ship(Image image, int frameWidth, int frameHeight) {
         super(image, frameWidth, frameHeight);
@@ -37,6 +37,7 @@ public class Ship extends GameObjectSprite{
         } else if ((getX() + getWidth()) > Screen.getWidth()) {
             setX(Screen.getWidth() - getWidth());
         }
+        animate();
     }
 
     public void paint(Graphics g) {
