@@ -138,8 +138,8 @@ public class ScreenGame extends Screen {
                 Enemie3 en = new Enemie3(imageEnimie3, 52, 30);
                 en.setX((52 * i) + (15 * i));
                 en.setY(10);
-                en.setSpeedY(2);
-                en.setSpeedX(8);
+                en.setVelocidade(-7);
+
                 enimiesup.addObject(en);
             }
 
@@ -147,8 +147,8 @@ public class ScreenGame extends Screen {
                 Enemie3 en = new Enemie3(imageEnimie3, 52, 30);
                 en.setX((52 * i) + (15 * i));
                 en.setY(55);
-                en.setSpeedY(2);
-                en.setSpeedX(-7);
+                en.setVelocidade(8);
+
                 enimiesdown.addObject(en);
             }
         }
@@ -164,7 +164,8 @@ public class ScreenGame extends Screen {
                 Enemie4 en = new Enemie4(imageEnimie4, 52, 30);
                 en.setX((52 * i) + (15 * i));
                 en.setY(10);
-                en.setVelocidade(8);
+                en.setSpeedY(2);
+                en.setSpeedX(8);
                 enimiesup.addObject(en);
             }
 
@@ -172,7 +173,8 @@ public class ScreenGame extends Screen {
                 Enemie4 en = new Enemie4(imageEnimie4, 52, 30);
                 en.setX((52 * i) + (15 * i));
                 en.setY(55);
-                en.setVelocidade(-7);
+                en.setSpeedY(2);
+                en.setSpeedX(-7);
                 enimiesdown.addObject(en);
             }
         }
@@ -230,8 +232,8 @@ public class ScreenGame extends Screen {
             shield.setVisible(false);
             shield.setActive(false);
         }
-        
-        
+
+
         //se tem escudo nao pode receber colisao
         if (!haveShield) {
             //imimigos com nave
@@ -333,8 +335,8 @@ public class ScreenGame extends Screen {
         if (Key.FIRE) {
             if (haveDoubleMissile) {
                 missileLauncher.doublefire(ship.getCenterX(), ship.getCenterY(),
-                        105,75, Global.BULLET_SPEED);                
-                
+                        105, 75, Global.BULLET_SPEED);
+
             } else {
                 missileLauncher.fire(ship.getCenterX(), ship.getCenterY(),
                         90, Global.BULLET_SPEED);
@@ -349,7 +351,7 @@ public class ScreenGame extends Screen {
             if (enimiesup.getObject(inimigo).isActive()) {
                 if (enimiesup.getObject(inimigo).getCenterX() < Screen.getWidth()) {
                     missileEnimieLauncher.fire(enimiesup.getObject(inimigo).getCenterX(), enimiesup.getObject(inimigo).getCenterY(),
-                            270, Global.BULLET_SPEED);
+                            270, Global.BULLET_ENEMIE_SPEED);
                     contFireEnemie = 0;
                     atirado = true;
                 }
@@ -357,7 +359,7 @@ public class ScreenGame extends Screen {
             if (enimiesdown.getObject(inimigo).isActive()) {
                 if (enimiesdown.getObject(inimigo).getCenterX() < (Screen.getWidth())) {
                     missileEnimieLauncher.fire(enimiesdown.getObject(inimigo).getCenterX(), enimiesdown.getObject(inimigo).getCenterY(),
-                            270, Global.BULLET_SPEED);
+                            270, Global.BULLET_ENEMIE_SPEED);
                     contFireEnemie = 0;
                     atirado = true;
                 }

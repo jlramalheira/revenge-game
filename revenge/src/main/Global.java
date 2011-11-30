@@ -35,6 +35,7 @@ public class Global {
     
     public static final int BULLET_START_NUMBER = 3;
     public static final double BULLET_SPEED = 10;
+    public static final double BULLET_ENEMIE_SPEED = 5;
     public static final int BULLET_MAX_MISSLES = 3;
     public static final int BULLET_FIRE_FELAY = 15;
     public static final int BULLET_MAX_NUMBER = 3;
