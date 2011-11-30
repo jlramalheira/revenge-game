@@ -48,7 +48,7 @@ public class Global {
     public static final int SCREEN_HEIGHT= 320;
     
     //sons do jogo
-    public static final String MUSIC_INTO = FOLDER + "Intro.mid";
+    public static final String MUSIC_INTRO = FOLDER + "Intro.mid";
     public static final String MUSIC_GAME = FOLDER + "Game.mid";
     public static final String MUSIC_END = FOLDER + "Ending.mid";
     public static final String MUSIC_BOSS = FOLDER + "Boss.mid";

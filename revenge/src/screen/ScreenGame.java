@@ -49,8 +49,8 @@ public class ScreenGame extends Screen {
     private int qtdeDoubleMissile;
 
     public ScreenGame() {
-        level = 1;
-        
+        level = 0;
+        Sound.play(Global.MUSIC_INTRO, true);
         loadResources();
         initGame();
 
@@ -63,6 +63,8 @@ public class ScreenGame extends Screen {
         enimiesdown = new ObjectsCollection(Global.ENIMIES_MAX_NUMBER);
         quantidadeEnimie = Global.ENIMIES_MAX_NUMBER * 2;
         contFireEnemie = 0;
+        bgLined = new Background(Util.loadImage(Global.IMG_BG_LINED), Background.SCROLL_NONE);
+        bgStars = new Background(Util.loadImage(Global.IMG_BG_STARS), Background.SCROLL_DOWN);
 
         shield = new Shield(Util.loadImage(Global.IMG_BONUS_SHIELD), 25, 25);
         shield.setSpeedY(Global.BONUS_SPEED);
@@ -84,8 +86,7 @@ public class ScreenGame extends Screen {
 
         if (level
                 == 1) {
-            bgLined = new Background(Util.loadImage(Global.IMG_BG_LINED), Background.SCROLL_NONE);
-            bgStars = new Background(Util.loadImage(Global.IMG_BG_STARS), Background.SCROLL_DOWN);
+            Sound.play(Global.MUSIC_GAME, true);
             particleSystemExplosion = new ParticleSystemExplosion(
                     Util.loadImage(Global.EVADER_IMG_EXPLOSION_1), 30, 30, 10);
             Image imageEnimie1 = Util.loadImage(Global.IMG_ENEMIE_1);
@@ -108,8 +109,6 @@ public class ScreenGame extends Screen {
 
         if (level
                 == 2) {
-            bgLined = new Background(Util.loadImage(Global.IMG_BG_LINED), Background.SCROLL_NONE);
-            bgStars = new Background(Util.loadImage(Global.IMG_BG_STARS), Background.SCROLL_DOWN);
             particleSystemExplosion = new ParticleSystemExplosion(
                     Util.loadImage(Global.EVADER_IMG_EXPLOSION_2), 30, 30, 10);
             Image imageEnimie2 = Util.loadImage(Global.IMG_ENEMIE_2);
@@ -132,8 +131,6 @@ public class ScreenGame extends Screen {
 
         if (level
                 == 3) {
-            bgLined = new Background(Util.loadImage(Global.IMG_BG_LINED), Background.SCROLL_NONE);
-            bgStars = new Background(Util.loadImage(Global.IMG_BG_STARS), Background.SCROLL_DOWN);
             particleSystemExplosion = new ParticleSystemExplosion(
                     Util.loadImage(Global.EVADER_IMG_EXPLOSION_3), 30, 30, 10);
             Image imageEnimie3 = Util.loadImage(Global.IMG_ENEMIE_3);
@@ -158,8 +155,6 @@ public class ScreenGame extends Screen {
 
         if (level
                 == 4) {
-            bgLined = new Background(Util.loadImage(Global.IMG_BG_LINED), Background.SCROLL_NONE);
-            bgStars = new Background(Util.loadImage(Global.IMG_BG_STARS), Background.SCROLL_DOWN);
             particleSystemExplosion = new ParticleSystemExplosion(
                     Util.loadImage(Global.EVADER_IMG_EXPLOSION_4), 30, 30, 10);
             Image imageEnimie4 = Util.loadImage(Global.IMG_ENEMIE_4);
@@ -181,6 +176,11 @@ public class ScreenGame extends Screen {
                 enimiesdown.addObject(en);
             }
         }
+
+        if (level == 5) {
+            //BOSS
+            Sound.play(Global.MUSIC_BOSS, true);
+        }
     }
 
     /**
@@ -191,6 +191,9 @@ public class ScreenGame extends Screen {
         ship.setY(Screen.getHeight() - ship.getHeight() - 20);
         ship.setAnimation(Ship.ANIM_NONE);
         ship.setTransformation(Ship.TRANS_NONE);
+        Sound.setEnabled(true);
+
+
 
         missileLauncher.makeAllObjectsAvailable();
         missileEnimieLauncher.makeAllObjectsAvailable();
@@ -200,19 +203,16 @@ public class ScreenGame extends Screen {
     public void update() {
         switch (gameSate) {
             case STATE_TITLE:
-                Sound.play(Global.MUSIC_INTO);
                 updateGameTitle();
                 break;
 
             case STATE_PLAY:
-                Sound.play(Global.MUSIC_GAME);
                 updateGameScoreAndLevel();
                 updateGameObjects();
                 updateCollisions();
                 break;
 
             case STATE_GAMEOVER:
-                Sound.play(Global.MUSIC_END);
                 if (Key.FIRE) {
                     gameSate = STATE_TITLE;
                 }
