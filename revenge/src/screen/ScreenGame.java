@@ -5,6 +5,7 @@
 package screen;
 
 import framework.*;
+import game.Boss;
 import game.DoubleMissile;
 import game.Enemie1;
 import game.Enemie2;
@@ -28,6 +29,7 @@ public class ScreenGame extends Screen {
     public static final int STATE_TITLE = 0;
     public static final int STATE_PLAY = 1;
     public static final int STATE_GAMEOVER = 2;
+    public static final int STATE_WINNER = 3;
     private int gameSate;
     private Background bgLined;
     private Background bgStars;
@@ -47,6 +49,8 @@ public class ScreenGame extends Screen {
     private Shield shield;
     private DoubleMissile doubleMissile;
     private int qtdeDoubleMissile;
+    private Boss boss;
+    private int contToBossDie;
 
     public ScreenGame() {
         level = 0;
@@ -75,6 +79,7 @@ public class ScreenGame extends Screen {
         haveDoubleMissile = false;
         timeBonus = 0;
         qtdeDoubleMissile = 0;
+        contToBossDie = 0;
 
 
         Image imageMissleEnemie = Util.loadImage(Global.IMG_MISSLE_ENEMIE);
@@ -180,6 +185,11 @@ public class ScreenGame extends Screen {
         if (level == 5) {
             //BOSS
             Sound.play(Global.MUSIC_BOSS, true);
+            boss = new Boss(Util.loadImage(Global.IMG_BOSS), 100, 100);
+            particleSystemExplosion = new ParticleSystemExplosion(
+                    Util.loadImage(Global.EVADER_IMG_EXPLOSION_BOSS), 30, 30, 10);
+            boss.setSpeedX(Global.BOSS_SPEEDX);
+            boss.setSpeedY(Global.BOSS_SPEEDY);
         }
     }
 
@@ -217,6 +227,12 @@ public class ScreenGame extends Screen {
                     gameSate = STATE_TITLE;
                 }
                 break;
+
+            case STATE_WINNER:
+                if (Key.FIRE) {
+                    gameSate = STATE_TITLE;
+                }
+                break;
         }
 
     }
@@ -225,9 +241,10 @@ public class ScreenGame extends Screen {
         bgStars.update();
         if (Key.FIRE) {
             gameSate = STATE_PLAY;
-            level = 1;
+            level = 5;
             loadResources();
             initGame();
+
         }
     }
 
@@ -279,33 +296,68 @@ public class ScreenGame extends Screen {
                 timeBonus = 0;
             }
         }
+        if (level != 5) {
+            //nave com tiro
+            for (int i = 0; i < enimiesup.getTotalSize(); i++) {
+                if (enimiesup.getObject(i).isActive()) {
+                    if (missileLauncher.collidesWithActiveObjects(enimiesup.getObject(i), false)) {
+                        particleSystemExplosion.addParticles(enimiesup.getObject(i).getCenterX(), enimiesup.getObject(i).getCenterY());
+                        enimiesup.getObject(i).setActive(false);
+                        enimiesup.getObject(i).setVisible(false);
+                        enimiesup.makeObjectAvailable(enimiesup.getObject(i));
+                        quantidadeEnimie--;
 
-        //nave com tiro
-        for (int i = 0; i < enimiesup.getTotalSize(); i++) {
-            if (enimiesup.getObject(i).isActive()) {
-                if (missileLauncher.collidesWithActiveObjects(enimiesup.getObject(i), false)) {
-                    particleSystemExplosion.addParticles(enimiesup.getObject(i).getCenterX(), enimiesup.getObject(i).getCenterY());
-                    enimiesup.getObject(i).setActive(false);
-                    enimiesup.getObject(i).setVisible(false);
-                    enimiesup.makeObjectAvailable(enimiesup.getObject(i));
-                    quantidadeEnimie--;
-
-                    //caindo bonus
-                    if (!haveDoubleMissile && !haveShield) {
-                        int teste = r.nextInt(Global.POSSIBILITES_BONUS);
-                        if (teste == 1) {
-                            if (!doubleMissile.isActive()) {
-                                doubleMissile.setActive(true);
-                                doubleMissile.setVisible(true);
-                                doubleMissile.setX(enimiesdown.getObject(i).getCenterX());
-                                doubleMissile.setY(enimiesdown.getObject(i).getCenterY());
+                        //caindo bonus
+                        if (!haveDoubleMissile && !haveShield) {
+                            int teste = r.nextInt(Global.POSSIBILITES_BONUS);
+                            if (teste == 1) {
+                                if (!doubleMissile.isActive()) {
+                                    doubleMissile.setActive(true);
+                                    doubleMissile.setVisible(true);
+                                    doubleMissile.setX(enimiesdown.getObject(i).getCenterX());
+                                    doubleMissile.setY(enimiesdown.getObject(i).getCenterY());
+                                }
+                            } else {
+                                if (!shield.isActive()) {
+                                    shield.setActive(true);
+                                    shield.setVisible(true);
+                                    shield.setX(enimiesdown.getObject(i).getCenterX());
+                                    shield.setY(enimiesdown.getObject(i).getCenterY());
+                                }
                             }
-                        } else {
-                            if (!shield.isActive()) {
-                                shield.setActive(true);
-                                shield.setVisible(true);
-                                shield.setX(enimiesdown.getObject(i).getCenterX());
-                                shield.setY(enimiesdown.getObject(i).getCenterY());
+                        }
+                    }
+                }
+            }
+
+
+
+            for (int i = 0; i < enimiesdown.getTotalSize(); i++) {
+                if (enimiesdown.getObject(i).isActive()) {
+                    if (missileLauncher.collidesWithActiveObjects(enimiesdown.getObject(i), false)) {
+                        particleSystemExplosion.addParticles(enimiesdown.getObject(i).getCenterX(), enimiesdown.getObject(i).getCenterY());
+                        enimiesdown.getObject(i).setActive(false);
+                        enimiesdown.getObject(i).setVisible(false);
+                        enimiesdown.makeObjectAvailable(enimiesdown.getObject(i));
+                        quantidadeEnimie--;
+
+                        //caindo bonus
+                        if (!haveDoubleMissile && !haveShield) {
+                            int teste = r.nextInt(Global.POSSIBILITES_BONUS);
+                            if (teste == 1) {
+                                if (!doubleMissile.isActive()) {
+                                    doubleMissile.setActive(true);
+                                    doubleMissile.setVisible(true);
+                                    doubleMissile.setX(enimiesdown.getObject(i).getCenterX());
+                                    doubleMissile.setY(enimiesdown.getObject(i).getCenterY());
+                                }
+                            } else {
+                                if (!shield.isActive()) {
+                                    shield.setActive(true);
+                                    shield.setVisible(true);
+                                    shield.setX(enimiesdown.getObject(i).getCenterX());
+                                    shield.setY(enimiesdown.getObject(i).getCenterY());
+                                }
                             }
                         }
                     }
@@ -313,36 +365,16 @@ public class ScreenGame extends Screen {
             }
         }
 
+        //nave com o boos
+        if (boss.collidesWith(ship, true)) {
+            gameSate = STATE_GAMEOVER;
+        }
 
-        for (int i = 0; i < enimiesdown.getTotalSize(); i++) {
-            if (enimiesdown.getObject(i).isActive()) {
-                if (missileLauncher.collidesWithActiveObjects(enimiesdown.getObject(i), false)) {
-                    particleSystemExplosion.addParticles(enimiesdown.getObject(i).getCenterX(), enimiesdown.getObject(i).getCenterY());
-                    enimiesdown.getObject(i).setActive(false);
-                    enimiesdown.getObject(i).setVisible(false);
-                    enimiesdown.makeObjectAvailable(enimiesdown.getObject(i));
-                    quantidadeEnimie--;
-
-                    //caindo bonus
-                    if (!haveDoubleMissile && !haveShield) {
-                        int teste = r.nextInt(Global.POSSIBILITES_BONUS);
-                        if (teste == 1) {
-                            if (!doubleMissile.isActive()) {
-                                doubleMissile.setActive(true);
-                                doubleMissile.setVisible(true);
-                                doubleMissile.setX(enimiesdown.getObject(i).getCenterX());
-                                doubleMissile.setY(enimiesdown.getObject(i).getCenterY());
-                            }
-                        } else {
-                            if (!shield.isActive()) {
-                                shield.setActive(true);
-                                shield.setVisible(true);
-                                shield.setX(enimiesdown.getObject(i).getCenterX());
-                                shield.setY(enimiesdown.getObject(i).getCenterY());
-                            }
-                        }
-                    }
-                }
+        //tiro com o boss
+        if (missileLauncher.collidesWithActiveObjects(boss, true)) {
+            particleSystemExplosion.addParticles(boss.getCenterX(), boss.getCenterY());
+            if (contToBossDie++ == Global.MISSLE_BOSS_DIE) {
+                gameSate = STATE_WINNER;
             }
         }
     }
@@ -361,30 +393,32 @@ public class ScreenGame extends Screen {
         }
 
         //MÉTODO PARA O INIMIGO ATIRAR
-        //Procura um inimigo que esteja ativo e dentro da tela, se não achar, encontra outro
-        boolean atirado = false;
-        do {
-            int inimigo = r.nextInt(enimiesup.getAvailableSize());
-            if (enimiesup.getObject(inimigo).isActive()) {
-                if (enimiesup.getObject(inimigo).getCenterX() < Screen.getWidth()) {
-                    missileEnimieLauncher.fire(enimiesup.getObject(inimigo).getCenterX(), enimiesup.getObject(inimigo).getCenterY(),
-                            270, Global.BULLET_ENEMIE_SPEED);
-                    contFireEnemie = 0;
-                    atirado = true;
-                }
-            }
-            if (enimiesdown.getObject(inimigo).isActive()) {
-                if (enimiesdown.getObject(inimigo).getCenterX() < (Screen.getWidth())) {
-                    missileEnimieLauncher.fire(enimiesdown.getObject(inimigo).getCenterX(), enimiesdown.getObject(inimigo).getCenterY(),
-                            270, Global.BULLET_ENEMIE_SPEED);
-                    contFireEnemie = 0;
-                    atirado = true;
-                }
-            }
-            //Faz o processo enquanto não encontrar e fazer dois segundos
-        } while ((atirado = false) && (contFireEnemie++ >= (300) / level));
-        atirado = false;
 
+        //Procura um inimigo que esteja ativo e dentro da tela, se não achar, encontra outro
+        if (level != 5) {
+            boolean atirado = false;
+            do {
+                int inimigo = r.nextInt(enimiesup.getAvailableSize());
+                if (enimiesup.getObject(inimigo).isActive()) {
+                    if (enimiesup.getObject(inimigo).getCenterX() < Screen.getWidth()) {
+                        missileEnimieLauncher.fire(enimiesup.getObject(inimigo).getCenterX(), enimiesup.getObject(inimigo).getCenterY(),
+                                270, Global.BULLET_ENEMIE_SPEED);
+                        contFireEnemie = 0;
+                        atirado = true;
+                    }
+                }
+                if (enimiesdown.getObject(inimigo).isActive()) {
+                    if (enimiesdown.getObject(inimigo).getCenterX() < (Screen.getWidth())) {
+                        missileEnimieLauncher.fire(enimiesdown.getObject(inimigo).getCenterX(), enimiesdown.getObject(inimigo).getCenterY(),
+                                270, Global.BULLET_ENEMIE_SPEED);
+                        contFireEnemie = 0;
+                        atirado = true;
+                    }
+                }
+                //Faz o processo enquanto não encontrar e fazer dois segundos
+            } while ((atirado = false) && (contFireEnemie++ >= (300) / level));
+            atirado = false;
+        }
         //UPDATE DOS OBJETCTS
         bgLined.update();
         bgStars.update();
@@ -393,6 +427,8 @@ public class ScreenGame extends Screen {
         missileLauncher.update();
         missileEnimieLauncher.update();
         shield.update();
+        boss.update();
+
         doubleMissile.update();
         enimiesup.updateActiveObjects();
         enimiesdown.updateActiveObjects();
@@ -420,6 +456,9 @@ public class ScreenGame extends Screen {
             case STATE_GAMEOVER:
                 paintGameOver(g);
                 break;
+            case STATE_WINNER:
+                paintWinner(g);
+                break;
         }
     }
 
@@ -431,12 +470,11 @@ public class ScreenGame extends Screen {
         missileEnimieLauncher.paint(g);
         shield.paint(g);
         doubleMissile.paint(g);
+        boss.paint(g);
 
         enimiesup.paintVisibleObjects(g);
         enimiesdown.paintVisibleObjects(g);
         particleSystemExplosion.paint(g);
-
-
     }
 
     private void paintHud(Graphics g) {
@@ -452,5 +490,8 @@ public class ScreenGame extends Screen {
         bgLined.paint(g);
         bgStars.paint(g);
         Text.drawText("APERTE -FIRE- PARA INICIAR", Text.CENTER, 180, g);
+    }
+
+    private void paintWinner(Graphics g) {
     }
 }

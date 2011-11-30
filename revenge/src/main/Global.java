@@ -21,6 +21,7 @@ public class Global {
     public static final String IMG_BG_LINED = FOLDER + "back1.jpg";
     public static final String IMG_BG_STARS = FOLDER + "back2.png";
     public static final String IMG_SHIP = FOLDER + "ship.png";
+    public static final String IMG_BOSS = FOLDER + "boss.png";
     public static final String IMG_ENEMIE_1 = FOLDER + "en1.png";
     public static final String IMG_ENEMIE_2 = FOLDER + "en2.png";
     public static final String IMG_ENEMIE_3 = FOLDER + "en3.png";
@@ -31,6 +32,7 @@ public class Global {
     public static final String EVADER_IMG_EXPLOSION_2 = FOLDER + "explosion2.png";
     public static final String EVADER_IMG_EXPLOSION_3 = FOLDER + "explosion3.png";
     public static final String EVADER_IMG_EXPLOSION_4 = FOLDER + "explosion4.png";
+    public static final String EVADER_IMG_EXPLOSION_BOSS = FOLDER + "explosion_boss.png";
     
     
     public static final int BULLET_START_NUMBER = 3;
@@ -55,6 +57,11 @@ public class Global {
 
     // configuracoes dos objetos do jogo
     public static final int SHIP_SPEED = 5;    
+    public static final int BOSS_SPEEDX = 4;    
+    public static final int BOSS_SPEEDY = 3;
+    
+    //boss
+    public static final int MISSLE_BOSS_DIE = 50;
     
     //configuracao dos bonus
     public static final int POSSIBILITES_BONUS = 10;
