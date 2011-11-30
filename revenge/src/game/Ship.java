@@ -17,7 +17,8 @@ import main.Global;
  */
 public class Ship extends GameObjectSprite{
 
-    public static final int[] ANIM_MOVE = {0,1,2};
+    public static final int[] ANIM_NONE = {0,1,2};
+    public static final int[] ANIM_SHIELD = {3,4,5};
 
     public Ship(Image image, int frameWidth, int frameHeight) {
         super(image, frameWidth, frameHeight);

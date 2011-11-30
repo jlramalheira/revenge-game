@@ -186,7 +186,7 @@ public class ScreenGame extends Screen {
     public final void initGame() {
         ship.setX(Util.centerX(ship.getWidth()));
         ship.setY(Screen.getHeight() - ship.getHeight() - 20);
-        ship.setAnimation(Ship.ANIM_MOVE);
+        ship.setAnimation(Ship.ANIM_NONE);
         ship.setTransformation(Ship.TRANS_NONE);
 
         missileLauncher.makeAllObjectsAvailable();
@@ -229,6 +229,7 @@ public class ScreenGame extends Screen {
         //nave com shield
         if (shield.collidesWith(ship, true)) {
             haveShield = true;
+            ship.setAnimation(Ship.ANIM_SHIELD);
             shield.setVisible(false);
             shield.setActive(false);
         }
@@ -251,6 +252,7 @@ public class ScreenGame extends Screen {
             if (timeBonus++ >= Global.TIME_BONUS) {
                 haveShield = false;
                 timeBonus = 0;
+                ship.setAnimation(Ship.ANIM_NONE);
             }
         }
 
