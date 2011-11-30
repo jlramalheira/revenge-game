@@ -62,7 +62,7 @@ public class Global {
     public static final int BOSS_SPEEDY = 9;
     
     //boss
-    public static final int MISSLE_BOSS_DIE = 50;
+    public static final int MISSLE_BOSS_DIE = 20;
     
     //configuracao dos bonus
     public static final int POSSIBILITES_BONUS = 10;

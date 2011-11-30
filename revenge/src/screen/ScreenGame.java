@@ -247,7 +247,7 @@ public class ScreenGame extends Screen {
             gameSate = STATE_PLAY;
             lives = 3;
             score = 0;
-            level = 5;
+            level = 1;
             loadResources();
             initGame();
 
