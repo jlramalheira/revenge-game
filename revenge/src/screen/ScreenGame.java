@@ -74,10 +74,10 @@ public class ScreenGame extends Screen {
 
         Image imageMissleEnemie = Util.loadImage(Global.IMG_MISSLE_ENEMIE);
         missileEnimieLauncher = new MissileLauncher(imageMissleEnemie,
-                14, 4, Global.BULLET_FIRE_FELAY, Global.BULLET_MAX_NUMBER);
+                14, 4, 10, Global.BULLET_MAX_NUMBER);
         Image imageMissle = Util.loadImage(Global.IMG_MISSILE);
         missileLauncher = new MissileLauncher(imageMissle,
-                14, 4, Global.BULLET_FIRE_FELAY, Global.BULLET_MAX_MISSLES);
+                7, 7, Global.BULLET_FIRE_FELAY, Global.BULLET_MAX_MISSLES);
 
         if (level
                 == 1) {
@@ -332,11 +332,11 @@ public class ScreenGame extends Screen {
     }
 
     private void updateGameObjects() {
+        //TIRO DO PLAYER
         if (Key.FIRE) {
             if (haveDoubleMissile) {
                 missileLauncher.doublefire(ship.getCenterX(), ship.getCenterY(),
                         105, 75, Global.BULLET_SPEED);
-
             } else {
                 missileLauncher.fire(ship.getCenterX(), ship.getCenterY(),
                         90, Global.BULLET_SPEED);
@@ -364,10 +364,11 @@ public class ScreenGame extends Screen {
                     atirado = true;
                 }
             }
-        } while ((atirado = false) && (contFireEnemie++ >= 60));
-
+            //Faz o processo enquanto não encontrar e fazer dois segundos
+        } while ((atirado = false) && (contFireEnemie++ >= (300) / level));
         atirado = false;
 
+        //UPDATE DOS OBJETCTS
         bgLined.update();
         bgStars.update();
         particleSystemExplosion.update();
@@ -376,7 +377,6 @@ public class ScreenGame extends Screen {
         missileEnimieLauncher.update();
         shield.update();
         doubleMissile.update();
-
         enimiesup.updateActiveObjects();
         enimiesdown.updateActiveObjects();
     }
