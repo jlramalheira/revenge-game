@@ -217,9 +217,13 @@ public class ScreenGame extends Screen {
                 break;
 
             case STATE_PLAY:
+                System.out.println("1");
                 updateGameScoreAndLevel();
+                System.out.println("2");
                 updateGameObjects();
+                System.out.println("3");
                 updateCollisions();
+                System.out.println("4");
                 break;
 
             case STATE_GAMEOVER:
@@ -366,15 +370,17 @@ public class ScreenGame extends Screen {
         }
 
         //nave com o boos
-        if (boss.collidesWith(ship, true)) {
-            gameSate = STATE_GAMEOVER;
-        }
+        if (boss != null) {
+            if (boss.collidesWith(ship, true)) {
+                gameSate = STATE_GAMEOVER;
+            }
 
-        //tiro com o boss
-        if (missileLauncher.collidesWithActiveObjects(boss, true)) {
-            particleSystemExplosion.addParticles(boss.getCenterX(), boss.getCenterY());
-            if (contToBossDie++ == Global.MISSLE_BOSS_DIE) {
-                gameSate = STATE_WINNER;
+            //tiro com o boss
+            if (missileLauncher.collidesWithActiveObjects(boss, true)) {
+                particleSystemExplosion.addParticles(boss.getCenterX(), boss.getCenterY());
+                if (contToBossDie++ == Global.MISSLE_BOSS_DIE) {
+                    gameSate = STATE_WINNER;
+                }
             }
         }
     }
@@ -383,7 +389,7 @@ public class ScreenGame extends Screen {
         //TIRO DO PLAYER
         if (Key.FIRE) {
             if (haveDoubleMissile) {
-                missileLauncher.doublefire(ship.getCenterX(), ship.getCenterY(),
+                missileLauncher.doublefire(ship.getCenterX(), ship.getCenterY(), ship.getCenterX(), ship.getCenterY(),
                         105, 75, Global.BULLET_SPEED);
                 qtdeDoubleMissile++;
             } else {
@@ -395,8 +401,9 @@ public class ScreenGame extends Screen {
         //MÉTODO PARA O INIMIGO ATIRAR
 
         //Procura um inimigo que esteja ativo e dentro da tela, se não achar, encontra outro
+        boolean atirado = false;
         if (level != 5) {
-            boolean atirado = false;
+
             do {
                 int inimigo = r.nextInt(enimiesup.getAvailableSize());
                 if (enimiesup.getObject(inimigo).isActive()) {
@@ -416,8 +423,16 @@ public class ScreenGame extends Screen {
                     }
                 }
                 //Faz o processo enquanto não encontrar e fazer dois segundos
-            } while ((atirado = false) && (contFireEnemie++ >= (300) / level));
+            } while ((!atirado) && (contFireEnemie++ >= (300) / level));
             atirado = false;
+        } else { //tiro do boss
+            if (boss.getY() < 5) {
+                if (contFireEnemie++ >= 30) {
+                    missileEnimieLauncher.doublefire(boss.getCenterX() + 26, boss.getCenterY() + 36, boss.getCenterX() - 26, boss.getCenterY() + 36,
+                            270, 270, Global.BULLET_ENEMIE_SPEED);
+                    contFireEnemie = 0;
+                }
+            }
         }
         //UPDATE DOS OBJETCTS
         bgLined.update();
@@ -427,7 +442,10 @@ public class ScreenGame extends Screen {
         missileLauncher.update();
         missileEnimieLauncher.update();
         shield.update();
-        boss.update();
+        if (boss != null) {
+
+            boss.update();
+        }
 
         doubleMissile.update();
         enimiesup.updateActiveObjects();
@@ -436,9 +454,7 @@ public class ScreenGame extends Screen {
 
     private void updateGameScoreAndLevel() {
         if (quantidadeEnimie <= 0) {
-            System.out.println("Estou em" + level);
             level++;
-            System.out.println("Fui para" + level);
             loadResources();
             initGame();
         }
@@ -470,7 +486,9 @@ public class ScreenGame extends Screen {
         missileEnimieLauncher.paint(g);
         shield.paint(g);
         doubleMissile.paint(g);
-        boss.paint(g);
+        if (boss != null) {
+            boss.paint(g);
+        }
 
         enimiesup.paintVisibleObjects(g);
         enimiesdown.paintVisibleObjects(g);
