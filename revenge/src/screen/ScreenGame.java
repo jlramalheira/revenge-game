@@ -51,9 +51,11 @@ public class ScreenGame extends Screen {
     private int qtdeDoubleMissile;
     private Boss boss;
     private int contToBossDie;
+    private int lives;
 
     public ScreenGame() {
         level = 0;
+        lives = 3;
         Sound.play(Global.MUSIC_INTRO, true);
         loadResources();
         initGame();
@@ -190,6 +192,7 @@ public class ScreenGame extends Screen {
                     Util.loadImage(Global.EVADER_IMG_EXPLOSION_BOSS), 30, 30, 10);
             boss.setSpeedX(Global.BOSS_SPEEDX);
             boss.setSpeedY(Global.BOSS_SPEEDY);
+
         }
     }
 
@@ -202,8 +205,6 @@ public class ScreenGame extends Screen {
         ship.setAnimation(Ship.ANIM_NONE);
         ship.setTransformation(Ship.TRANS_NONE);
         Sound.setEnabled(true);
-
-
 
         missileLauncher.makeAllObjectsAvailable();
         missileEnimieLauncher.makeAllObjectsAvailable();
@@ -245,6 +246,7 @@ public class ScreenGame extends Screen {
         bgStars.update();
         if (Key.FIRE) {
             gameSate = STATE_PLAY;
+            lives = 3;
             level = 5;
             loadResources();
             initGame();
@@ -266,12 +268,24 @@ public class ScreenGame extends Screen {
         if (!haveShield) {
             //imimigos com nave
             if (enimiesup.collidesWithActiveObjects(ship, true)) {
-                gameSate = STATE_GAMEOVER;
+                if (lives == 0) {
+                    gameSate = STATE_GAMEOVER;
+                } else {
+                    lives--;
+                    loadResources();
+                    initGame();
+                }
             }
 
             //tiro inimigo nave
             if (missileEnimieLauncher.collidesWithActiveObjects(ship, true)) {
-                gameSate = STATE_GAMEOVER;
+                if (lives == 0) {
+                    gameSate = STATE_GAMEOVER;
+                } else {
+                    lives--;
+                    loadResources();
+                    initGame();
+                }
             }
         }
 
@@ -372,7 +386,13 @@ public class ScreenGame extends Screen {
         //nave com o boos
         if (boss != null) {
             if (boss.collidesWith(ship, true)) {
-                gameSate = STATE_GAMEOVER;
+                if (lives == 0) {
+                    gameSate = STATE_GAMEOVER;
+                } else {
+                    lives--;
+                    loadResources();
+                    initGame();
+                }
             }
 
             //tiro com o boss
@@ -443,7 +463,6 @@ public class ScreenGame extends Screen {
         missileEnimieLauncher.update();
         shield.update();
         if (boss != null) {
-
             boss.update();
         }
 
@@ -496,6 +515,9 @@ public class ScreenGame extends Screen {
     }
 
     private void paintHud(Graphics g) {
+        for (int i = 1; i <= lives; i++) {
+            Util.drawImage(Util.loadImage(Global.IMG_MINI_SHIP), 140 + 20 * i, 0, g);
+        }
     }
 
     private void paintGameOver(Graphics g) {
