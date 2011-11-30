@@ -46,6 +46,12 @@ public class Global {
     // tamanho da tela em pixels
     public static final int SCREEN_WIDTH = 240;
     public static final int SCREEN_HEIGHT= 320;
+    
+    //sons do jogo
+    public static final String MUSIC_INTO = FOLDER + "Intro.mid";
+    public static final String MUSIC_GAME = FOLDER + "Game.mid";
+    public static final String MUSIC_END = FOLDER + "Ending.mid";
+    public static final String MUSIC_BOSS = FOLDER + "Boss.mid";
 
     // configuracoes dos objetos do jogo
     public static final int SHIP_SPEED = 5;    
@@ -54,6 +60,7 @@ public class Global {
     public static final int POSSIBILITES_BONUS = 10;
     public static final int BONUS_SPEED = 5;
     public static final int TIME_BONUS = 60;
+    public static final int NUMBER_DOUBLE_MISSILE = 3;
     public static final String IMG_BONUS_SHIELD = FOLDER + "shield.png";
     public static final String IMG_BONUS_DOUBLE_MISSILE = FOLDER + "double_missile.png";
    

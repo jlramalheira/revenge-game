@@ -46,9 +46,11 @@ public class ScreenGame extends Screen {
     private int timeBonus;
     private Shield shield;
     private DoubleMissile doubleMissile;
+    private int qtdeDoubleMissile;
 
     public ScreenGame() {
         level = 1;
+        
         loadResources();
         initGame();
 
@@ -70,6 +72,7 @@ public class ScreenGame extends Screen {
         haveShield = false;
         haveDoubleMissile = false;
         timeBonus = 0;
+        qtdeDoubleMissile = 0;
 
 
         Image imageMissleEnemie = Util.loadImage(Global.IMG_MISSLE_ENEMIE);
@@ -197,16 +200,19 @@ public class ScreenGame extends Screen {
     public void update() {
         switch (gameSate) {
             case STATE_TITLE:
+                Sound.play(Global.MUSIC_INTO);
                 updateGameTitle();
                 break;
 
             case STATE_PLAY:
+                Sound.play(Global.MUSIC_GAME);
                 updateGameScoreAndLevel();
                 updateGameObjects();
                 updateCollisions();
                 break;
 
             case STATE_GAMEOVER:
+                Sound.play(Global.MUSIC_END);
                 if (Key.FIRE) {
                     gameSate = STATE_TITLE;
                 }
@@ -254,6 +260,10 @@ public class ScreenGame extends Screen {
                 timeBonus = 0;
                 ship.setAnimation(Ship.ANIM_NONE);
             }
+            //some com o tiro caso esteja com escudo
+            if (missileEnimieLauncher.collidesWithActiveObjects(ship, true)) {
+                missileEnimieLauncher.makeAllObjectsAvailable();
+            }
         }
 
         //nave com double missile
@@ -264,7 +274,7 @@ public class ScreenGame extends Screen {
         }
 
         if (haveDoubleMissile) {
-            if (timeBonus++ >= Global.TIME_BONUS) {
+            if (qtdeDoubleMissile >= Global.NUMBER_DOUBLE_MISSILE) {
                 haveDoubleMissile = false;
                 timeBonus = 0;
             }
@@ -343,6 +353,7 @@ public class ScreenGame extends Screen {
             if (haveDoubleMissile) {
                 missileLauncher.doublefire(ship.getCenterX(), ship.getCenterY(),
                         105, 75, Global.BULLET_SPEED);
+                qtdeDoubleMissile++;
             } else {
                 missileLauncher.fire(ship.getCenterX(), ship.getCenterY(),
                         90, Global.BULLET_SPEED);
