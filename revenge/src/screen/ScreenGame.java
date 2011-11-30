@@ -52,10 +52,13 @@ public class ScreenGame extends Screen {
     private Boss boss;
     private int contToBossDie;
     private int lives;
+    private int score;
+    private Image mini_ship;
 
     public ScreenGame() {
         level = 0;
         lives = 3;
+        mini_ship = Util.loadImage(Global.IMG_MINI_SHIP);
         Sound.play(Global.MUSIC_INTRO, true);
         loadResources();
         initGame();
@@ -139,8 +142,8 @@ public class ScreenGame extends Screen {
         if (level
                 == 3) {
             particleSystemExplosion = new ParticleSystemExplosion(
-                    Util.loadImage(Global.EVADER_IMG_EXPLOSION_3), 30, 30, 10);
-            Image imageEnimie3 = Util.loadImage(Global.IMG_ENEMIE_3);
+                    Util.loadImage(Global.EVADER_IMG_EXPLOSION_4), 30, 30, 10);
+            Image imageEnimie3 = Util.loadImage(Global.IMG_ENEMIE_4);
             for (int i = 0; i < enimiesup.getTotalSize(); i++) {
                 Enemie3 en = new Enemie3(imageEnimie3, 52, 30);
                 en.setX((52 * i) + (15 * i));
@@ -163,8 +166,8 @@ public class ScreenGame extends Screen {
         if (level
                 == 4) {
             particleSystemExplosion = new ParticleSystemExplosion(
-                    Util.loadImage(Global.EVADER_IMG_EXPLOSION_4), 30, 30, 10);
-            Image imageEnimie4 = Util.loadImage(Global.IMG_ENEMIE_4);
+                    Util.loadImage(Global.EVADER_IMG_EXPLOSION_3), 30, 30, 10);
+            Image imageEnimie4 = Util.loadImage(Global.IMG_ENEMIE_3);
             for (int i = 0; i < enimiesup.getTotalSize(); i++) {
                 Enemie4 en = new Enemie4(imageEnimie4, 52, 30);
                 en.setX((52 * i) + (15 * i));
@@ -218,13 +221,9 @@ public class ScreenGame extends Screen {
                 break;
 
             case STATE_PLAY:
-                System.out.println("1");
                 updateGameScoreAndLevel();
-                System.out.println("2");
                 updateGameObjects();
-                System.out.println("3");
                 updateCollisions();
-                System.out.println("4");
                 break;
 
             case STATE_GAMEOVER:
@@ -247,7 +246,8 @@ public class ScreenGame extends Screen {
         if (Key.FIRE) {
             gameSate = STATE_PLAY;
             lives = 3;
-            level = 5;
+            score = 0;
+            level = 4;
             loadResources();
             initGame();
 
@@ -272,6 +272,7 @@ public class ScreenGame extends Screen {
                     gameSate = STATE_GAMEOVER;
                 } else {
                     lives--;
+                    score = 0;
                     loadResources();
                     initGame();
                 }
@@ -283,6 +284,7 @@ public class ScreenGame extends Screen {
                     gameSate = STATE_GAMEOVER;
                 } else {
                     lives--;
+                    score = 0;
                     loadResources();
                     initGame();
                 }
@@ -311,7 +313,7 @@ public class ScreenGame extends Screen {
         if (haveDoubleMissile) {
             if (qtdeDoubleMissile >= Global.NUMBER_DOUBLE_MISSILE) {
                 haveDoubleMissile = false;
-                timeBonus = 0;
+                qtdeDoubleMissile = 3;
             }
         }
         if (level != 5) {
@@ -324,6 +326,7 @@ public class ScreenGame extends Screen {
                         enimiesup.getObject(i).setVisible(false);
                         enimiesup.makeObjectAvailable(enimiesup.getObject(i));
                         quantidadeEnimie--;
+                        score += 20;
 
                         //caindo bonus
                         if (!haveDoubleMissile && !haveShield) {
@@ -358,6 +361,7 @@ public class ScreenGame extends Screen {
                         enimiesdown.getObject(i).setVisible(false);
                         enimiesdown.makeObjectAvailable(enimiesdown.getObject(i));
                         quantidadeEnimie--;
+                        score += 20;
 
                         //caindo bonus
                         if (!haveDoubleMissile && !haveShield) {
@@ -390,6 +394,7 @@ public class ScreenGame extends Screen {
                     gameSate = STATE_GAMEOVER;
                 } else {
                     lives--;
+                    score = 0;
                     loadResources();
                     initGame();
                 }
@@ -398,6 +403,7 @@ public class ScreenGame extends Screen {
             //tiro com o boss
             if (missileLauncher.collidesWithActiveObjects(boss, true)) {
                 particleSystemExplosion.addParticles(boss.getCenterX(), boss.getCenterY());
+                score += 5;
                 if (contToBossDie++ == Global.MISSLE_BOSS_DIE) {
                     gameSate = STATE_WINNER;
                 }
@@ -474,6 +480,7 @@ public class ScreenGame extends Screen {
     private void updateGameScoreAndLevel() {
         if (quantidadeEnimie <= 0) {
             level++;
+            score += 100;
             loadResources();
             initGame();
         }
@@ -515,8 +522,9 @@ public class ScreenGame extends Screen {
     }
 
     private void paintHud(Graphics g) {
+        Text.drawText("SCORE: "+score, 10, 0, g);
         for (int i = 1; i <= lives; i++) {
-            Util.drawImage(Util.loadImage(Global.IMG_MINI_SHIP), 140 + 20 * i, 0, g);
+            Util.drawImage(mini_ship, 140 + 20 * i, 0, g);
         }
     }
 

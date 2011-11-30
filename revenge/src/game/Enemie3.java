@@ -35,6 +35,7 @@ public class Enemie3 extends GameObjectSprite {
         contBack = 0;
         contGo = 0;
         correto = true;
+        setAnimationDelay(8);
     }
 
     public void update() {

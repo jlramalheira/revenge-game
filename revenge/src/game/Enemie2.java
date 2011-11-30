@@ -34,6 +34,7 @@ public class Enemie2 extends GameObjectSprite {
         setActive(true);
         contStop = 0;
         contGo = 10;
+        setAnimationDelay(5);
         flying = true;
     }
 
@@ -64,6 +65,7 @@ public class Enemie2 extends GameObjectSprite {
                 setX(Screen.getWidth());
             }
         }
+        
         animate();
     }
 

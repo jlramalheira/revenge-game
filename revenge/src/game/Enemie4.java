@@ -23,7 +23,7 @@ public class Enemie4 extends GameObjectSprite {
         super(image, frameWidth, frameHeight);
         setActive(true);
         contInv = 0;
-        this.setAnimationDelay(5);
+        setAnimationDelay(5);
     }
 
     public void update() {

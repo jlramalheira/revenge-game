@@ -15,15 +15,16 @@ import javax.microedition.lcdui.Image;
  */
 public class Enemie1 extends GameObjectSprite {
 
-    public static final int[] ANIM_MOVE = {0,1,2};
+    public static final int[] ANIM_MOVE = {0, 1, 2};
 
     public Enemie1(Image image, int frameWidth, int frameHeight) {
         super(image, frameWidth, frameHeight);
         setActive(true);
+        setAnimationDelay(10);
     }
 
     public void update() {
-        
+
         if (getSpeedX() > 0) {
             if (getX() > 620) { //625 é o numero para 10 inimigos
                 setX(0 - getWidth());
@@ -35,7 +36,6 @@ public class Enemie1 extends GameObjectSprite {
         }
 
         setX(getX() + getSpeedX());
-        setAnimationDelay(10);
         animate();
     }
 
