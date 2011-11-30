@@ -48,7 +48,7 @@ public class ScreenGame extends Screen {
     private DoubleMissile doubleMissile;
 
     public ScreenGame() {
-        level = 3;
+        level = 1;
         loadResources();
         initGame();
 
@@ -56,15 +56,15 @@ public class ScreenGame extends Screen {
 
     public final void loadResources() {
         //Game objects
-        ship = new Ship(Util.loadImage(Global.IMG_SHIP), 50, 50);
+        ship = new Ship(Util.loadImage(Global.IMG_SHIP), 45, 45);
         enimiesup = new ObjectsCollection(Global.ENIMIES_MAX_NUMBER);
         enimiesdown = new ObjectsCollection(Global.ENIMIES_MAX_NUMBER);
         quantidadeEnimie = Global.ENIMIES_MAX_NUMBER * 2;
         contFireEnemie = 0;
 
-        shield = new Shield(Util.loadImage(Global.IMG_BONUS_SHIELD), 16, 16);
+        shield = new Shield(Util.loadImage(Global.IMG_BONUS_SHIELD), 25, 25);
         shield.setSpeedY(Global.BONUS_SPEED);
-        doubleMissile = new DoubleMissile(Util.loadImage(Global.IMG_BONUS_DOUBLE_MISSILE), 24, 24);
+        doubleMissile = new DoubleMissile(Util.loadImage(Global.IMG_BONUS_DOUBLE_MISSILE), 25, 25);
         doubleMissile.setSpeedY(Global.BONUS_SPEED);
 
         haveShield = false;
@@ -77,7 +77,7 @@ public class ScreenGame extends Screen {
                 14, 4, 10, Global.BULLET_MAX_NUMBER);
         Image imageMissle = Util.loadImage(Global.IMG_MISSILE);
         missileLauncher = new MissileLauncher(imageMissle,
-                7, 7, Global.BULLET_FIRE_FELAY, Global.BULLET_MAX_MISSLES);
+                5, 5, Global.BULLET_FIRE_FELAY, Global.BULLET_MAX_MISSLES);
 
         if (level
                 == 1) {
@@ -281,14 +281,15 @@ public class ScreenGame extends Screen {
                     //caindo bonus
                     if (!haveDoubleMissile && !haveShield) {
                         int teste = r.nextInt(Global.POSSIBILITES_BONUS);
-                        System.out.println(teste);
                         if (teste == 1) {
-                            if (0 == 0) {
+                            if (!doubleMissile.isActive()) {
                                 doubleMissile.setActive(true);
                                 doubleMissile.setVisible(true);
                                 doubleMissile.setX(enimiesdown.getObject(i).getCenterX());
                                 doubleMissile.setY(enimiesdown.getObject(i).getCenterY());
-                            } else {
+                            }
+                        } else {
+                            if (!shield.isActive()) {
                                 shield.setActive(true);
                                 shield.setVisible(true);
                                 shield.setX(enimiesdown.getObject(i).getCenterX());
@@ -299,6 +300,8 @@ public class ScreenGame extends Screen {
                 }
             }
         }
+
+
         for (int i = 0; i < enimiesdown.getTotalSize(); i++) {
             if (enimiesdown.getObject(i).isActive()) {
                 if (missileLauncher.collidesWithActiveObjects(enimiesdown.getObject(i), false)) {
@@ -311,14 +314,15 @@ public class ScreenGame extends Screen {
                     //caindo bonus
                     if (!haveDoubleMissile && !haveShield) {
                         int teste = r.nextInt(Global.POSSIBILITES_BONUS);
-                        System.out.println(teste);
                         if (teste == 1) {
-                            if (0 == 0) {
+                            if (!doubleMissile.isActive()) {
                                 doubleMissile.setActive(true);
                                 doubleMissile.setVisible(true);
                                 doubleMissile.setX(enimiesdown.getObject(i).getCenterX());
                                 doubleMissile.setY(enimiesdown.getObject(i).getCenterY());
-                            } else {
+                            }
+                        } else {
+                            if (!shield.isActive()) {
                                 shield.setActive(true);
                                 shield.setVisible(true);
                                 shield.setX(enimiesdown.getObject(i).getCenterX());
