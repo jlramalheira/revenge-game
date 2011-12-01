@@ -8,7 +8,7 @@ package main;
 import framework.GameEngine;
 import javax.microedition.lcdui.Display;
 import javax.microedition.midlet.*;
-import screen.ScreenGame;
+import screen.SelectGameScreen;
 
 /**
  * @author marcos
@@ -20,7 +20,7 @@ public class Midlet extends MIDlet {
         instance = this;
         GameEngine engine = new GameEngine(Global.SCREEN_WIDTH, Global.SCREEN_HEIGHT, true);
         GameEngine.setShowInfo(Global.SHOW_INFO);
-        engine.start(new ScreenGame());
+        engine.start(new SelectGameScreen());
         Display.getDisplay(this).setCurrent(engine);
     }
 

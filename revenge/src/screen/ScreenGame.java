@@ -33,6 +33,8 @@ public class ScreenGame extends Screen {
     private int gameSate;
     private Background bgLined;
     private Background bgStars;
+    private Background bgGameOver;
+    private Background bgWinner;
     private Ship ship;
     private ObjectsCollection enimiesup;
     private ObjectsCollection enimiesdown;
@@ -59,7 +61,7 @@ public class ScreenGame extends Screen {
         level = 0;
         lives = 3;
         mini_ship = Util.loadImage(Global.IMG_MINI_SHIP);
-        Sound.play(Global.MUSIC_INTRO, true);
+        Sound.play(Global.MUSIC_GAME, true);
         loadResources();
         initGame();
 
@@ -74,6 +76,8 @@ public class ScreenGame extends Screen {
         contFireEnemie = 0;
         bgLined = new Background(Util.loadImage(Global.IMG_BG_LINED), Background.SCROLL_NONE);
         bgStars = new Background(Util.loadImage(Global.IMG_BG_STARS), Background.SCROLL_DOWN);
+        bgGameOver = new Background(Util.loadImage(Global.IMG_BG_GAMEOVER), Background.SCROLL_NONE);
+        bgWinner = new Background(Util.loadImage(Global.IMG_BG_WINNER), Background.SCROLL_NONE);
 
         shield = new Shield(Util.loadImage(Global.IMG_BONUS_SHIELD), 25, 25);
         shield.setSpeedY(Global.BONUS_SPEED);
@@ -96,7 +100,6 @@ public class ScreenGame extends Screen {
 
         if (level
                 == 1) {
-            Sound.play(Global.MUSIC_GAME, true);
             particleSystemExplosion = new ParticleSystemExplosion(
                     Util.loadImage(Global.EVADER_IMG_EXPLOSION_1), 30, 30, 10);
             Image imageEnimie1 = Util.loadImage(Global.IMG_ENEMIE_1);
@@ -189,7 +192,6 @@ public class ScreenGame extends Screen {
 
         if (level == 5) {
             //BOSS
-            Sound.play(Global.MUSIC_BOSS, true);
             boss = new Boss(Util.loadImage(Global.IMG_BOSS), 75, 75);
             particleSystemExplosion = new ParticleSystemExplosion(
                     Util.loadImage(Global.EVADER_IMG_EXPLOSION_BOSS), 30, 30, 10);
@@ -197,6 +199,8 @@ public class ScreenGame extends Screen {
             boss.setSpeedY(Global.BOSS_SPEEDY);
 
         }
+        
+        System.gc();
     }
 
     /**
@@ -313,7 +317,7 @@ public class ScreenGame extends Screen {
         if (haveDoubleMissile) {
             if (qtdeDoubleMissile >= Global.NUMBER_DOUBLE_MISSILE) {
                 haveDoubleMissile = false;
-                qtdeDoubleMissile = 3;
+                qtdeDoubleMissile = 0;
             }
         }
         if (level != 5) {
@@ -463,6 +467,8 @@ public class ScreenGame extends Screen {
         //UPDATE DOS OBJETCTS
         bgLined.update();
         bgStars.update();
+        bgGameOver.update();
+        bgWinner.update();
         particleSystemExplosion.update();
         ship.update();
         missileLauncher.update();
@@ -522,16 +528,21 @@ public class ScreenGame extends Screen {
     }
 
     private void paintHud(Graphics g) {
-        Text.drawText("SCORE: "+score, 10, 0, g);
+        Text.drawText("SCORE: " + score, 10, 0, g);
         for (int i = 1; i <= lives; i++) {
             Util.drawImage(mini_ship, 140 + 20 * i, 0, g);
         }
     }
 
     private void paintGameOver(Graphics g) {
-        Text.drawText("G-A-M-E O-V-E-R", Text.CENTER, 150, g);
-        Text.drawText("APERTE -FIRE- PARA REINICIAR", Text.CENTER, 200, g);
+        bgGameOver.paint(g);
         paintHud(g);
+        if (Key.ACTION_LEFT) {
+            Screen.setCurrentScreen(new SelectGameScreen());
+        }
+        if (Key.ACTION_RIGHT) {
+            Screen.setCurrentScreen(new SelectGameScreen());
+        }
     }
 
     private void paintTitle(Graphics g) {
@@ -541,5 +552,12 @@ public class ScreenGame extends Screen {
     }
 
     private void paintWinner(Graphics g) {
+        bgWinner.paint(g);
+        if (Key.ACTION_LEFT) {
+            Screen.setCurrentScreen(new SelectGameScreen());
+        }
+        if (Key.ACTION_RIGHT) {
+            Screen.setCurrentScreen(new SelectGameScreen());
+        }
     }
 }

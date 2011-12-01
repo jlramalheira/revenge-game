@@ -20,6 +20,10 @@ public class Global {
     // jogo revenge
     public static final String IMG_BG_LINED = FOLDER + "back1.jpg";
     public static final String IMG_BG_STARS = FOLDER + "back2.png";
+    public static final String IMG_BG_INTRO = FOLDER + "backIntro.png";
+    public static final String IMG_BG_GAMEOVER = FOLDER + "backGameOver.png";
+    public static final String IMG_BG_WINNER = FOLDER + "backWin.png";
+    public static final String IMG_BG_CREDITS = FOLDER + "backCred.png";
     public static final String IMG_SHIP = FOLDER + "ship.png";
     public static final String IMG_MINI_SHIP = FOLDER + "mini_ship.png";
     public static final String IMG_BOSS = FOLDER + "boss.png";
