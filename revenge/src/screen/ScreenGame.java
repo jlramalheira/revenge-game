@@ -232,13 +232,13 @@ public class ScreenGame extends Screen {
 
             case STATE_GAMEOVER:
                 if (Key.FIRE) {
-                    gameSate = STATE_TITLE;
+                    Screen.setCurrentScreen(new SelectGameScreen());
                 }
                 break;
 
             case STATE_WINNER:
                 if (Key.FIRE) {
-                    gameSate = STATE_TITLE;
+                    Screen.setCurrentScreen(new SelectGameScreen());
                 }
                 break;
         }
@@ -304,6 +304,7 @@ public class ScreenGame extends Screen {
             //some com o tiro caso esteja com escudo
             if (missileEnimieLauncher.collidesWithActiveObjects(ship, true)) {
                 missileEnimieLauncher.makeAllObjectsAvailable();
+                boss = null;
             }
         }
 
@@ -395,6 +396,7 @@ public class ScreenGame extends Screen {
         if (boss != null) {
             if (boss.collidesWith(ship, true)) {
                 if (lives == 0) {
+                    boss = null;
                     gameSate = STATE_GAMEOVER;
                 } else {
                     lives--;
